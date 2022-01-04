@@ -118,8 +118,10 @@ header a.back {
 
 /*---- RESULTS ----*/
 .result {
-    column-count: 2;
-    column-gap: 2rem;
+    -moz-column-count: 2;
+         column-count: 2;
+    -moz-column-gap: 2rem;
+         column-gap: 2rem;
     margin-top: 2rem;
 }
 

@@ -65,6 +65,34 @@ main {
     transition: 0.2s;
 }
 
+.field input::-webkit-input-placeholder, .field textarea::-webkit-input-placeholder {
+    font-family: inherit;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #C4C4C4;
+}
+
+.field input::-moz-placeholder, .field textarea::-moz-placeholder {
+    font-family: inherit;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #C4C4C4;
+}
+
+.field input:-ms-input-placeholder, .field textarea:-ms-input-placeholder {
+    font-family: inherit;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #C4C4C4;
+}
+
+.field input::-ms-input-placeholder, .field textarea::-ms-input-placeholder {
+    font-family: inherit;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #C4C4C4;
+}
+
 .field input::placeholder, .field textarea::placeholder, .field input {
     font-family: inherit;
     font-size: 1.3rem;

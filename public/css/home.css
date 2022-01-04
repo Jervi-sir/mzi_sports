@@ -43,8 +43,10 @@ header {
 
 /*---- RESULTS ----*/
 .result {
-    column-count: 2;
-    column-gap: 2rem;
+    -moz-column-count: 2;
+         column-count: 2;
+    -moz-column-gap: 2rem;
+         column-gap: 2rem;
 }
 
 .card {
@@ -78,8 +80,21 @@ header {
 /*----------------*/
 
 .liked {
-    animation: animatename 0.5s ease-out;
+    -webkit-animation: animatename 0.5s ease-out;
+            animation: animatename 0.5s ease-out;
 }
+
+@-webkit-keyframes animatename{
+    0%{
+      transform: scale(1)
+    }
+    20%{
+      transform: scale(1.5)
+    }
+    100%{
+      transform: scale(1)
+    }
+  }
 
 @keyframes animatename{
     0%{
