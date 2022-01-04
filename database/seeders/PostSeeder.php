@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Helpers\Helper;
 use App\Models\Post;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
@@ -20,7 +21,7 @@ class PostSeeder extends Seeder
         DB::table('posts')->insert([
             'user_id' => 1,
             'type' => 'video',
-            'media_link' => 'bruh.com',
+            'media_link' => Helper::random(),
             'media' => 'pics/card1.png',
             'description' => Str::random(40),
             'tags' => 'zzz, zzd, zfdsw',
@@ -30,7 +31,7 @@ class PostSeeder extends Seeder
         DB::table('posts')->insert([
             'user_id' => 1,
             'type' => 'image',
-            'media_link' => 'bruh.com',
+            'media_link' => Helper::random(),
             'media' => 'pics/card2.png',
             'description' => Str::random(40),
             'tags' => 'zzz, zzd, zfdsw',
@@ -40,7 +41,7 @@ class PostSeeder extends Seeder
         DB::table('posts')->insert([
             'user_id' => 1,
             'type' => 'video',
-            'media_link' => 'bruh.com',
+            'media_link' => Helper::random(),
             'media' => 'pics/card3.png',
             'description' => Str::random(40),
             'tags' => 'zzz, zzd, zfdsw',
@@ -50,7 +51,7 @@ class PostSeeder extends Seeder
         DB::table('posts')->insert([
             'user_id' => 3,
             'type' => 'image',
-            'media_link' => 'bruh.com',
+            'media_link' => Helper::random(),
             'media' => 'pics/card4.png',
             'description' => Str::random(40),
             'tags' => 'zzz, zzd, zfdsw',
@@ -60,7 +61,7 @@ class PostSeeder extends Seeder
         DB::table('posts')->insert([
             'user_id' => 3,
             'type' => 'image',
-            'media_link' => 'bruh.com',
+            'media_link' => Helper::random(),
             'media' => 'pics/card5.png',
             'description' => Str::random(40),
             'tags' => 'zzz, zzd, zfdsw',
