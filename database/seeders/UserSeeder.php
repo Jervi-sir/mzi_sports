@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Helpers\Helper;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
@@ -23,6 +24,7 @@ class UserSeeder extends Seeder
             'email' => 'su@gmail.com',
             'password' => Hash::make('password'),
             'phone_number' => '0558054300',
+            'uuid' => Helper::random(),
         ]);
 
         DB::table('users')->insert([
@@ -31,6 +33,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
             'phone_number' => '0558054300',
+            'uuid' => Helper::random(),
         ]);
 
         DB::table('users')->insert([
@@ -39,6 +42,7 @@ class UserSeeder extends Seeder
             'email' => Str::random(10).'@gmail.com',
             'password' => Hash::make('password'),
             'phone_number' => '0558054300',
+            'uuid' => Helper::random(),
         ]);
 
 
@@ -48,6 +52,7 @@ class UserSeeder extends Seeder
             'email' => Str::random(10).'@gmail.com',
             'password' => Hash::make('password'),
             'phone_number' => '0558054300',
+            'uuid' => Helper::random(),
         ]);
     }
 }

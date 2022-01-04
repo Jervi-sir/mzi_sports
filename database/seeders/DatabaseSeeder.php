@@ -22,14 +22,14 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $role = new RoleSeeder;
         $location = new LocationSeeder;
-        //$user = new UserSeeder;
-        //$post = new PostSeeder;
+        $user = new UserSeeder;
+        $post = new PostSeeder;
         $tag = new TagSeeder;
 
         $role->run();
         $location->run();
-        //$user->run();
-        //$post->run();
+        $user->run();
+        $post->run();
         $tag->run();
     }
 }
