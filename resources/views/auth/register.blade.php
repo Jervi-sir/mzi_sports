@@ -66,7 +66,6 @@
             </div>
             <button class="register-button" :disabled="disabled" type="submit">{{ __('Register') }}</button>
         </form>
-        <button @click="pssdMatch">valide</button>
         <div class="separator-or">
             <div class="line"></div>
             <div class="middle">OR</div>
