@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -14,31 +17,37 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user = new User;
-        $user->role_id = 1;
-        $user->name = 'jervi';
-        $user->email = 'su@gmail.com';
-        $user->password = bcrypt('password');
-        $user->phone_number = '0558054300';
-        $user->location_id = 1;
-        $user->save();
+        DB::table('users')->insert([
+            'role_id' => 1,
+            'name' => Str::random(10),
+            'email' => 'su@gmail.com',
+            'password' => Hash::make('password'),
+            'phone_number' => '0558054300',
+        ]);
 
-        $user = new User;
-        $user->role_id = 2;
-        $user->name = 'iverj';
-        $user->email = 'admin@gmail.com';
-        $user->password = bcrypt('password');
-        $user->phone_number = '0558054300';
-        $user->location_id = 2;
-        $user->save();
+        DB::table('users')->insert([
+            'role_id' => 2,
+            'name' => Str::random(10),
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('password'),
+            'phone_number' => '0558054300',
+        ]);
 
-        $user = new User;
-        $user->role_id = 3;
-        $user->name = 'bruh';
-        $user->email = 'sss@gmail.com';
-        $user->password = bcrypt('password');
-        $user->phone_number = '0558054300';
-        $user->location_id = 3;
-        $user->save();
+        DB::table('users')->insert([
+            'role_id' => 3,
+            'name' => Str::random(10),
+            'email' => Str::random(10).'@gmail.com',
+            'password' => Hash::make('password'),
+            'phone_number' => '0558054300',
+        ]);
+
+
+        DB::table('users')->insert([
+            'role_id' => 3,
+            'name' => Str::random(10),
+            'email' => Str::random(10).'@gmail.com',
+            'password' => Hash::make('password'),
+            'phone_number' => '0558054300',
+        ]);
     }
 }

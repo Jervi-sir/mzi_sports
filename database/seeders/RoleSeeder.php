@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class RoleSeeder extends Seeder
 {
@@ -14,17 +17,17 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $role = new Role;
-        $role->name = 'su';
-        $role->save();
+        DB::table('roles')->insert([
+            'name' => 'su',
+        ]);
 
-        $role = new Role;
-        $role->name = 'admin';
-        $role->save();
+        DB::table('roles')->insert([
+            'name' => 'admin',
+        ]);
 
-        $role = new Role;
-        $role->name = 'user';
-        $role->save();
+        DB::table('roles')->insert([
+            'name' => 'user',
+        ]);
 
     }
 }

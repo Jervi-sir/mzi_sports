@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Location;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class LocationSeeder extends Seeder
 {
@@ -14,34 +17,36 @@ class LocationSeeder extends Seeder
      */
     public function run()
     {
-        $location = new Location;
-        $location->name = 'algeria';
-        $location->continent = 'africa';
-        $location->save();
+        DB::table('locations')->insert([
+            'name' => 'algeria',
+            'continent' => 'africa',
+        ]);
 
-        $location = new Location;
-        $location->name = 'tunis';
-        $location->continent = 'africa';
-        $location->save();
+        DB::table('locations')->insert([
+            'name' => 'tunis',
+            'continent' => 'africa',
+        ]);
 
-        $location = new Location;
-        $location->name = 'england';
-        $location->continent = 'europe';
-        $location->save();
+        DB::table('locations')->insert([
+            'name' => 'england',
+            'continent' => 'europe',
+        ]);
 
-        $location = new Location;
-        $location->name = 'italy';
-        $location->continent = 'europe';
-        $location->save();
+        DB::table('locations')->insert([
+            'name' => 'italy',
+            'continent' => 'europe',
+        ]);
 
-        $location = new Location;
-        $location->name = 'malaysia';
-        $location->continent = 'asia';
-        $location->save();
+        DB::table('locations')->insert([
+            'name' => 'malaysia',
+            'continent' => 'asia',
+        ]);
 
-        $location = new Location;
-        $location->name = 'japane';
-        $location->continent = 'asia';
-        $location->save();
+
+        DB::table('locations')->insert([
+            'name' => 'japane',
+            'continent' => 'asia',
+        ]);
+
     }
 }

@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Tag;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class TagSeeder extends Seeder
 {
@@ -14,24 +16,25 @@ class TagSeeder extends Seeder
      */
     public function run()
     {
-        $tag = new Tag;
-        $tag->name = 'football';
-        $tag->save();
+        DB::table('tags')->insert([
+            'name' => 'football',
+        ]);
 
-        $tag = new Tag;
-        $tag->name = 'tennis';
-        $tag->save();
+        DB::table('tags')->insert([
+            'name' => 'tennis',
+        ]);
 
-        $tag = new Tag;
-        $tag->name = 'news';
-        $tag->save();
+        DB::table('tags')->insert([
+            'name' => 'news',
+        ]);
 
-        $tag = new Tag;
-        $tag->name = 'algeria';
-        $tag->save();
+        DB::table('tags')->insert([
+            'name' => 'algeria',
+        ]);
 
-        $tag = new Tag;
-        $tag->name = 'bruh';
-        $tag->save();
+        DB::table('tags')->insert([
+            'name' => 'bruh',
+        ]);
+
     }
 }

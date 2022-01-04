@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Post;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class PostSeeder extends Seeder
 {
@@ -15,40 +17,55 @@ class PostSeeder extends Seeder
      */
     public function run()
     {
-        $post = new Post;
-        $post->user_id = 1;
-        $post->type = 'video';
-        $post->media_link = 'bruh.com';
-        $post->description = Str::random(40);
-        $post->tags = 'zzz, zzd, zfdsw';
-        $post->others = Str::random(40);
-        $post->save();
+        DB::table('posts')->insert([
+            'user_id' => 1,
+            'type' => 'video',
+            'media_link' => 'bruh.com',
+            'media' => 'pics/card1.png',
+            'description' => Str::random(40),
+            'tags' => 'zzz, zzd, zfdsw',
+            'others' => Str::random(40),
+        ]);
 
-        $post = new Post;
-        $post->user_id = 1;
-        $post->type = 'image';
-        $post->media_link = 'bruh.com';
-        $post->description = Str::random(40);
-        $post->tags = 'zzz, zzd, zfdsw';
-        $post->others = Str::random(40);
-        $post->save();
+        DB::table('posts')->insert([
+            'user_id' => 1,
+            'type' => 'image',
+            'media_link' => 'bruh.com',
+            'media' => 'pics/card2.png',
+            'description' => Str::random(40),
+            'tags' => 'zzz, zzd, zfdsw',
+            'others' => Str::random(40),
+        ]);
 
-        $post = new Post;
-        $post->user_id = 2;
-        $post->type = 'video';
-        $post->media_link = 'bruh.com';
-        $post->description = Str::random(40);
-        $post->tags = 'zzz, zzd, zfdsw';
-        $post->others = Str::random(40);
-        $post->save();
+        DB::table('posts')->insert([
+            'user_id' => 1,
+            'type' => 'video',
+            'media_link' => 'bruh.com',
+            'media' => 'pics/card3.png',
+            'description' => Str::random(40),
+            'tags' => 'zzz, zzd, zfdsw',
+            'others' => Str::random(40),
+        ]);
 
-        $post = new Post;
-        $post->user_id = 3;
-        $post->type = 'image';
-        $post->media_link = 'bruh.com';
-        $post->description = Str::random(40);
-        $post->tags = 'zzz, zzd, zfdsw';
-        $post->others = Str::random(40);
-        $post->save();
+        DB::table('posts')->insert([
+            'user_id' => 3,
+            'type' => 'image',
+            'media_link' => 'bruh.com',
+            'media' => 'pics/card4.png',
+            'description' => Str::random(40),
+            'tags' => 'zzz, zzd, zfdsw',
+            'others' => Str::random(40),
+        ]);
+
+        DB::table('posts')->insert([
+            'user_id' => 3,
+            'type' => 'image',
+            'media_link' => 'bruh.com',
+            'media' => 'pics/card5.png',
+            'description' => Str::random(40),
+            'tags' => 'zzz, zzd, zfdsw',
+            'others' => Str::random(40),
+        ]);
+
     }
 }

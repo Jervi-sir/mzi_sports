@@ -1,0 +1,152 @@
+header {
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+    align-items: center;
+}
+
+header a.logo-menu img {
+    width: 4rem;
+}
+
+header img {
+    width: 100%;
+}
+
+header a.back {
+    text-align: end;
+}
+
+main {
+    margin-top: 3vh;
+}
+
+/*----- fields ------*/
+
+.preview-image {
+    overflow: hidden;
+    text-align: center;
+    height: 12rem;
+    width: 12rem;
+    margin: auto;
+    border-radius: 100%;
+    position: relative;
+}
+
+.preview-image img {
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    top: 50%;
+    bottom: 50%;
+    transform: translate(-50%, -50%);
+    height: 100%;
+}
+
+.field {
+    width: 100%;
+    margin-top: 1.5rem;
+    background: rgba(196, 196, 196, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.field .label {
+    padding: 0 1rem;
+    width: 6rem;
+    border-right: 2px solid #00000061;
+}
+
+.field.add-file {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    height: 4rem;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.field.add-file label {
+    width: 100%;
+    color: #C4C4C4;
+    cursor: pointer;
+}
+
+.field.add-file input {
+    display: none;
+}
+
+.field input {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline-width: 0.5rem;
+    outline-color: rgba(0, 0, 0, 0.05);
+    height: 4rem;
+    padding-left: 1.5rem;
+}
+
+.field input:focus {
+    outline-color: #C4C4C4;
+    transition: 0.2s;
+}
+
+.field input::placeholder, .field textarea::placeholder, .field input {
+    font-family: inherit;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #C4C4C4;
+}
+
+.field input {
+    color: black;
+}
+
+.field textarea {
+    width: 100%;
+    max-height: 10rem;
+    padding: 1.5rem;
+    resize: vertical;
+    background-color: transparent;
+    border: none;
+}
+
+button {
+    width: 100%;
+    background: #000000;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    margin-top: 2rem;
+
+    height: 4rem;
+
+    font-family: Poppins;
+    font-size: 1.3rem;
+    color: #FFFFFF;
+}
+
+.read-only {
+    background-color: rgba(0, 0, 0, 0.301);
+}
+
+.read-only input {
+    color: white
+}
+
+.field.geo {
+    display: flex;
+    align-items: center;
+    padding-right:2rem;
+}
+
+
+.field.geo .label {
+    text-align: center;
+}
+
+
+.space {
+    height: 1.5rem;
+}

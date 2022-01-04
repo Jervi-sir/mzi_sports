@@ -1,0 +1,137 @@
+header {
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+    align-items: center;
+}
+
+header a.logo-menu img {
+    width: 4rem;
+}
+
+header img {
+    width: 100%;
+}
+
+header a.back {
+    text-align: end;
+}
+
+
+/*----- top post -----*/
+.post {
+    font-family: 'poppins';
+    height: 90vh;
+}
+
+.post .top {
+    margin-bottom: 1rem;
+}
+.post .top .owner{
+    display: flex;
+    align-items: center;
+}
+
+.profile-pic {
+    overflow: hidden;
+    text-align: center;
+    height: 6rem;
+    width: 6rem;
+    border-radius: 100%;
+    position: relative;
+}
+
+.profile-pic img {
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    top: 50%;
+    bottom: 50%;
+    transform: translate(-50%, -50%);
+    height: 100%;
+}
+
+
+.post .top .owner form button{
+    font-family: 'poppins';
+    background-color: transparent;
+    border: none;
+    color: steelblue;
+    font-weight: 500;
+}
+
+.post .profile-pic {
+    margin-right: 2rem;
+    text-decoration: none;
+
+}
+
+.post .owner .username {
+    text-decoration: none;
+    color: inherit;
+}
+/*---- content ----*/
+.post .content{
+    height: 80%;
+}
+
+.post .content .media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    height: 100%;
+    border-radius: 1.5rem;
+}
+
+.post .content .media img {
+    width: 100%;
+}
+
+.post .content .media {
+    position: relative;
+}
+
+.post .content .play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: 50%;
+    bottom: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.8;
+    width: 25% !important;
+    cursor: pointer;
+}
+
+/*----- reactions ----*/
+.reactions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 2rem;
+}
+
+.reactions img {
+    width: 2.5rem;
+}
+
+.reactions .views {
+    font-family: 'poppins';
+    font-size: 1.3rem;
+}
+
+.reactions form button {
+    background-color: transparent;
+    border: none;
+}
+
+.guest-login {
+    font-family: 'poppins';
+    background-color: transparent;
+    border: none;
+    color: steelblue;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1.5rem;
+}

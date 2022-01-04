@@ -1,0 +1,142 @@
+.settings {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100vh;
+    width: 100%;
+    background-color: #F8F8F8;
+    z-index: 99;
+    transition: 0.5s;
+}
+
+.settings.active {
+    left: 0;
+    transition: 0.5s;
+}
+
+.settings .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    margin: auto;
+    height: 10vh;
+}
+
+.settings .back, .settings .back {
+    width: 4rem;
+    height: 4rem;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+/*----- loggins ------*/
+.logins {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10vh;
+}
+
+.logins a {
+    text-decoration: none;
+    background-color: #000000;
+    text-align: center;
+    color: white;
+    padding: .9rem 4rem;
+    font-size: 1.3rem;
+    border-radius: 1rem;
+}
+
+.logins .register {
+    background-color: white;
+    color: black;
+}
+/*------ profile  -----*/
+.settings .main {
+    width: 80%;
+    margin: auto;
+    height: 80vh;
+    margin-top: 6rem;
+}
+
+.settings .main .profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10vh;
+}
+
+.settings .main .profile h3 {
+    margin: 0%;
+    font-size: 1.3rem;
+}
+
+.settings .main .profile span {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.settings .main .profile .profile-image {
+    margin-right: 1rem;
+}
+
+.settings .main .profile .profile-image {
+    overflow: hidden;
+    text-align: center;
+    height: 6rem;
+    width: 6rem;
+    border-radius: 100%;
+    position: relative;
+}
+
+.settings .main .profile .profile-image img {
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    top: 50%;
+    bottom: 50%;
+    transform: translate(-50%, -50%);
+    height: 100%;
+}
+
+/*------ links  -----*/
+.setting-links {
+    display: flex;
+    flex-direction: column;
+    gap: 5vh;
+}
+
+.setting-links .link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+
+.setting-links .link img {
+    margin-right: 1.5rem;
+}
+
+
+.setting-links .link span {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.3rem;
+
+    color: #000000;
+}
+
+.setting-links form.link {
+    margin-top: 6rem;
+}
+
+.setting-links .link button {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.3rem;
+
+    color: #000000;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}

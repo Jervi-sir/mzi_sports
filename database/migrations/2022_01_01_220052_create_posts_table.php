@@ -17,7 +17,8 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('type')->nullable();
-            $table->string('media_link');
+            $table->string('media_link')->unique();
+            $table->string('media');
             $table->mediumText('description');
             $table->mediumText('tags');
             $table->mediumText('others')->nullable();     //contains stats

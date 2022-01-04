@@ -22,8 +22,11 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('phone_number')->nullable();
 
-            $table->foreignId('location_id')->constrained()->nullable();
+            $table->string('pic')->nullable();
+
+            $table->string('location')->nullable();
             $table->longText('other')->nullable();
+            $table->string('uuid')->unique();
 
             $table->rememberToken();
             $table->timestamps();
