@@ -107,7 +107,7 @@ class Helper
         $user = User::where('uuid', $uuid)->first();
         $posts = $user->posts;
         $auth = Auth()->user();
-
+        $data = [];
         foreach ($posts as $key => $post) {
             $likes = $post->usersLike;
             $data[$key] = [
