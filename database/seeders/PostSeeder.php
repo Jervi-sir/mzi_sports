@@ -22,9 +22,9 @@ class PostSeeder extends Seeder
             'user_id' => 1,
             'type' => 'video',
             'media_link' => Helper::random(),
-            'media' => 'pics/card1.png',
+            'media' => 'media/card1.png',
             'description' => Str::random(40),
-            'tags' => 'zzz, zzd, zfdsw',
+            'tags' => 'football, algeria, tennis',
             'others' => Str::random(40),
         ]);
 
@@ -32,9 +32,9 @@ class PostSeeder extends Seeder
             'user_id' => 1,
             'type' => 'image',
             'media_link' => Helper::random(),
-            'media' => 'pics/card2.png',
+            'media' => 'media/card2.png',
             'description' => Str::random(40),
-            'tags' => 'zzz, zzd, zfdsw',
+            'tags' => 'tennis',
             'others' => Str::random(40),
         ]);
 
@@ -42,9 +42,9 @@ class PostSeeder extends Seeder
             'user_id' => 1,
             'type' => 'video',
             'media_link' => Helper::random(),
-            'media' => 'pics/card3.png',
+            'media' => 'media/card3.png',
             'description' => Str::random(40),
-            'tags' => 'zzz, zzd, zfdsw',
+            'tags' => 'football',
             'others' => Str::random(40),
         ]);
 
@@ -52,9 +52,9 @@ class PostSeeder extends Seeder
             'user_id' => 3,
             'type' => 'image',
             'media_link' => Helper::random(),
-            'media' => 'pics/card4.png',
+            'media' => 'media/card4.png',
             'description' => Str::random(40),
-            'tags' => 'zzz, zzd, zfdsw',
+            'tags' => 'algeria',
             'others' => Str::random(40),
         ]);
 
@@ -62,9 +62,9 @@ class PostSeeder extends Seeder
             'user_id' => 3,
             'type' => 'image',
             'media_link' => Helper::random(),
-            'media' => 'pics/card5.png',
+            'media' => 'media/card5.png',
             'description' => Str::random(40),
-            'tags' => 'zzz, zzd, zfdsw',
+            'tags' => 'football',
             'others' => Str::random(40),
         ]);
 
