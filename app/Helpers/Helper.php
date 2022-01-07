@@ -19,7 +19,7 @@ class Helper
                 'uuid' => $user->uuid,
                 'name' => $user->name,
                 'email' => $user->email,
-                'pic' => $baseUrl . '/' . $user->pic,
+                'pic' => $user->pic,
             ];
         } else {
             $data = [
@@ -85,7 +85,7 @@ class Helper
             'name' => $user->name,
             'email' => $user->email,
             'profile_link' => $baseUrl . '/u' . '/' . $user->uuid,
-            'pic' => $baseUrl . '/' . $user->pic,
+            'pic' => $user->pic,
 
         ];
         return $data;
@@ -102,9 +102,9 @@ class Helper
             'email' => $user->email,
             'phone_number' => $user->phone_number,
             'location' => $user->location,
-            'bio' => $other->bio,
-            'link' => $other->link,
-            'pic' => $baseUrl . '/' . $user->pic,
+            'bio' => $other !== null ? $other->bio : '',
+            'link' => $other !== null ? $other->link : '',
+            'pic' => $user->pic,
             'postCount' => $posts->count(),
             'followers' => $user->followers()->count(),
             'following' => $user->followings()->count(),
@@ -124,7 +124,7 @@ class Helper
             $data[$key] = [
                 'type' => $post->type,
                 'url' => $base1 . $post->media_link,             //use uuid
-                'media' => $baseUrl . '/' . $post->media,
+                'media' => $post->media,
                 'media_link' => $post->media_link,
                 'description' => $post->description,
                 'tags' => $post->tags,

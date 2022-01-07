@@ -74,6 +74,7 @@
             },
             filterByTag: function(event, index) {
                 this.tempArray = [];
+                this.selectedTag = event.name;
                 this.posts.forEach(element => {
                     var tags = element.tags;
                     if(tags.includes(event.name)) {

@@ -13,11 +13,13 @@ html {
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #F7F7F7;
+    margin: 0;
 }
 
 /*----- heights ------*/
 header {
     height: 5vh;
+    background: linear-gradient( 180deg, #4B71EC 2.6%, #435ECE 56.9%, #353AA8 100%);
 }
 
 main {
@@ -31,6 +33,9 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+header img {
+    filter: invert(1);
 }
 
 

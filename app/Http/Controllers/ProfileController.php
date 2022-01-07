@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
-use App\Helpers\Helper;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProfileController extends Controller
 {
@@ -70,7 +71,14 @@ class ProfileController extends Controller
         $user->other = json_encode($data);
 
         if($request->hasFile('media')) {
-            $path = $request->file('media')->store('profile_pics');
+            $path = Cloudinary::upload($request->file('media')->getRealPath(),[
+                'folder' => 'profile',
+                'transformation' => [
+                    'width' => 200, 'height' => 200, 'crop' => 'fill',
+                    'quality' => 'auto','fetch_format' => 'auto',
+                    "radius"=>"max"
+                ]
+            ])->getSecurePath();
             $user->pic = $path;
         }
 
