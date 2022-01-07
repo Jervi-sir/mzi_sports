@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\URL;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class PostController extends Controller
 {
@@ -18,36 +19,43 @@ class PostController extends Controller
     {
         $data['tags'] = Helper::getTags();
         $data['auth'] = Helper::getAuth();
+        $data['badges'] = Helper::getBadges();
 
         return view('posts.add', ['tags' => json_encode($data['tags']),
-                                    'auth' => json_encode($data['auth'])
+                                    'auth' => json_encode($data['auth']),
+                                    'badges' => json_encode($data['badges'])
                                 ]);
     }
 
+
+
     public function store(Request $request)
     {
+
         // Tag String
-        $tagsName = Helper::tagToString($request->tags);
-        // get media Type
-        $mediaType = Helper::getMediaType($request->file('media'));
+        $tagsName = Helper::tagToString(json_decode($request->tags));
         //generate media link
         $random = Helper::random();
+
+        //get location badge for watermark
+        $badge = json_decode($request->badge);
         //upload media
-        $path = $request->file('media')->store('media');
+        //$path = $request->file('media')->store('media');
+        $uploadedFileUrl = $this->cloudUploadFile($request->file('media'), $badge = true);
 
         $post = new Post;
-        $post->user_id = 1;
-        $post->type = $mediaType;
+        $post->user_id = Auth()->user()->id;
+        $post->type = Helper::getMediaType($request->file('media'));
         $post->media_link = $random;
-        $post->media = $path;
+        $post->media = $uploadedFileUrl;
         $post->description = $request->description;
         $post->tags = $tagsName;
         $post->save();
 
         //attach tags to the post
-        foreach($request->tags as $tag) {
+        foreach(json_decode($request->tags) as $tag) {
             //get id
-            $tagId = json_decode($tag, true)['id'];
+            $tagId = $tag->id;
             //attach it to the post
             $post->tags()->attach($tagId);
         }
@@ -82,7 +90,59 @@ class PostController extends Controller
     /*************************************** */
     /************** HELPERS **************** */
 
-
+    private function cloudUploadFile($file, $badge) {
+        // get media Type
+        $mediaType = Helper::getMediaType($file);
+        if($badge) {
+            if($mediaType == 'image') {
+                $uploadedFileUrl = Cloudinary::upload($file->getRealPath(),[
+                    'folder' => 'images',
+                    'transformation' => [
+                        'width' => 1080, 'height' => 1080, 'crop' => 'limit',
+                        'overlay' => [
+                            'url' => $badge->img, 'flags' => 'layer_apply',
+                            'public_id' => $badge->public_id,
+                        ],
+                        'gravity' => 'north_east',
+                        'x' => 30, 'y' => 30,
+                        'quality' => 'auto','fetch_format' => 'auto',
+                    ]
+                ])->getSecurePath();
+            } else {
+                ini_set('max_execution_time', 180); //3 minutes
+                $uploadedFileUrl = Cloudinary::uploadVideo($file->getRealPath(), [
+                    'folder' => 'video',
+                    'transformation' => [
+                        'quality' => 'auto',
+                        'overlay' => [
+                            'url' => $badge->img, 'flags' => 'layer_apply',
+                            'public_id' => $badge->public_id,
+                        ],
+                        'gravity' => 'north_east',
+                        'x' => 30, 'y' => 30
+                    ],
+                ])->getSecurePath();
+            }
+        }
+        else {
+            if($mediaType == 'image') {
+                $uploadedFileUrl = Cloudinary::upload($file->getRealPath(),[
+                    'folder' => 'images',
+                    'transformation' => [
+                        'width' => 1080, 'height' => 1080, 'crop' => 'limit',
+                        'quality' => 'auto','fetch_format' => 'auto',
+                    ]
+                ])->getSecurePath();
+            } else {
+                ini_set('max_execution_time', 180); //3 minutes
+                $uploadedFileUrl = Cloudinary::uploadVideo($file->getRealPath(), [
+                    'folder' => 'video',
+                    'transformation' => ['quality' => 'auto'],
+                ])->getSecurePath();
+            }
+        }
+        return $uploadedFileUrl;
+    }
 
 
 

@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\PostSeeder;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
+use Database\Seeders\BadgeSeeder;
 use Database\Seeders\LocationSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,13 +24,15 @@ class DatabaseSeeder extends Seeder
         $role = new RoleSeeder;
         $location = new LocationSeeder;
         $user = new UserSeeder;
-        $post = new PostSeeder;
-        $tag = new TagSeeder;
+        //$post = new PostSeeder;
+        $tags = new TagSeeder;
+        $badges = new BadgeSeeder;
 
         $role->run();
         $location->run();
         $user->run();
-        $post->run();
-        $tag->run();
+        //$post->run();
+        $tags->run();
+        $badges->run();
     }
 }

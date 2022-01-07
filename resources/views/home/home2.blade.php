@@ -17,7 +17,9 @@
         <span v-for="(tag, index) in tags">
             <a href="#" @click="filterByTag(tag, index)" :class="{ active: tag.active }">@{{ tag.name }}</a>
         </span>
-
+        <span>
+            <a href="#"> + </a>
+        </span>
     </div>
     <div class="tab-title">
         <h3>
@@ -25,7 +27,7 @@
         </h3>
     </div>
 
-    <div class="result">
+    <div class="result-wide">
         <div href="#" class="card" v-for="(result, index) in results">
             <a :href="result.url">
                 <img class="card-img" :src="result.media" alt="">

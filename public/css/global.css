@@ -43,3 +43,8 @@ footer h6 {
     font-size: 1rem;
 }
 /*------- MENU --------*/
+
+.body {
+    width: 50%;
+    margin: auto;
+}

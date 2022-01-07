@@ -20,7 +20,7 @@ class HomeController extends Controller
         $data['tags'] = $this->getTags();
         $data['auth'] = Helper::getAuth();
 
-        return view('home.home', ['posts' => json_encode($data['posts']),
+        return view('home.home2', ['posts' => json_encode($data['posts']),
                                     'auth' => json_encode($data['auth']),
                                     'tags' => json_encode($data['tags'])]);
     }

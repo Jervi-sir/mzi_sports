@@ -16,12 +16,15 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('thumbnail')->nullable();
             $table->string('type')->nullable();
             $table->string('media_link')->unique();
             $table->string('media');
             $table->mediumText('description');
             $table->mediumText('tags');
             $table->mediumText('others')->nullable();     //contains stats
+            $table->mediumText('likes')->nullable();     //contains stats
+            $table->mediumText('stats')->nullable();
             $table->timestamps();
         });
     }

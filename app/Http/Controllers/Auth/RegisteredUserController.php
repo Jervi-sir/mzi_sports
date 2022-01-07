@@ -42,6 +42,9 @@ class RegisteredUserController extends Controller
             'location' => ['required', 'string', 'max:255'],
         ]);
 
+        $data['bio'] ='';
+        $data['link'] = '';
+
         $user = User::create([
             'role_id' => Role::where('name', 'user')->first()->id,
             'name' => $request->name,
@@ -50,6 +53,7 @@ class RegisteredUserController extends Controller
             'location' => $request->location,
             'uuid' => $this->random(),
             'pic' => 'profile_pics/user-circle.svg',
+            'other' => json_encode($data),
         ]);
 
         event(new Registered($user));

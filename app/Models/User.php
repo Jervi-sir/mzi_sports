@@ -28,6 +28,7 @@ class User extends Authenticatable
         'location',
         'uuid',
         'pic',
+        'other',
     ];
 
     /**

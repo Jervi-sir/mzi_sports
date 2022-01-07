@@ -12,6 +12,9 @@
     @yield('style-header')
     @yield('script-header')
     @yield('title')
+
+    @cloudinaryJS
+
 </head>
 <body>
     <div id="body" class="body">

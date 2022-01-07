@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Tag;
 use App\Models\User;
+use App\Models\Badges;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
 
@@ -46,25 +47,39 @@ class Helper
         return $data;
     }
 
+    static function getBadges() {
+        $badges = Badges::all();
+        foreach ($badges as $key => $badge) {
+        $location = json_decode($badge->location);
+        $data[$key] = [
+            'id' => $badge->id,
+            'img' => $badge->url,
+            'public_id' => $badge->public_id,
+            'title' =>  $location->en,
+            'ar' =>  $location->ar,
+            'fr' =>  $location->fr,
+        ];
+        }
+
+        return $data;
+    }
+
     static function getPost($post) {
         $baseUrl = URL::to('/');
-
         $data = [
             'id' => $post->id,
             'type' => $post->type,
             'media_link' => $post->media_link,
-            'media' => $baseUrl . '/' . $post->media,
+            'media' => $post->media,
             'description' => $post->description,
             'tags' => $post->tags,
             'views' => '123',
         ];
-
         return $data;
     }
 
     static function getUser($user) {
         $baseUrl = URL::to('/');
-
         $data = [
             'uuid' => $user->uuid,
             'name' => $user->name,
@@ -73,7 +88,6 @@ class Helper
             'pic' => $baseUrl . '/' . $user->pic,
 
         ];
-
         return $data;
     }
 
@@ -82,7 +96,6 @@ class Helper
         $user = User::where('uuid', $uuid)->first();
         $other = json_decode($user->other);
         $posts = $user->posts;
-
         $data = [
             'uuid' => $user->uuid,
             'name' => $user->name,
@@ -96,14 +109,12 @@ class Helper
             'followers' => $user->followers()->count(),
             'following' => $user->followings()->count(),
         ];
-
         return $data;
     }
 
     static function getUserPosts($uuid) {
         $baseUrl = URL::to('/');
         $base1 = URL::to('/p') . '/';
-
         $user = User::where('uuid', $uuid)->first();
         $posts = $user->posts;
         $auth = Auth()->user();
@@ -121,7 +132,6 @@ class Helper
                 'nbLikes' => $likes->count(),
             ];
         }
-
         return $data;
     }
 
@@ -133,7 +143,6 @@ class Helper
             ? ((date("Y") - $birthDate[2]) - 1)
             : (date("Y") - $birthDate[2]));
         $random = Str::random($age);
-
         return $random;
     }
 
@@ -145,18 +154,14 @@ class Helper
         } else {
             $mediaType = 'image';
         }
-
         return $mediaType;
     }
 
     static function tagToString($tags) {
         $tagsName = [];
         foreach($tags as $tag) {
-            array_push($tagsName, json_decode($tag, true)['name']);
+            array_push($tagsName, $tag->name);
         }
-
         return implode(", ", $tagsName);
     }
-
-
 }

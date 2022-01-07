@@ -18,12 +18,30 @@ header a.back {
 }
 
 main {
-    transform: translate(0%, 50%);
+    /*transform: translate(0%, 50%);*/
+    margin-top: 5vh;
 }
 
 /*----- fields ------*/
 
-.field {
+.preview-image {
+    width: 40rem;
+    height: 40rem;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #C4C4C4;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.preview-image img{
+    height: 100%;
+    margin: auto;
+}
+
+.field,.multiselect__tags {
     width: 100%;
     margin-top: 1.5rem;
     background: rgba(196, 196, 196, 0.2);
@@ -34,8 +52,8 @@ main {
 .field.add-file {
     display: flex;
     align-items: center;
-    padding: 1.5rem;
-    height: 4rem;
+    padding-left: 1.5rem;
+    height: 5rem;
     font-size: 1.3rem;
     cursor: pointer;
 }
@@ -44,10 +62,19 @@ main {
     width: 100%;
     color: #C4C4C4;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
 }
 
 .field.add-file input {
     display: none;
+}
+
+.field.add-file:active {
+    background-color: #6e6e6e;
+    color: white;
+    transition: 0.5s;
 }
 
 .field input {
@@ -125,4 +152,18 @@ button {
     font-family: Poppins;
     font-size: 1.3rem;
     color: #FFFFFF;
+}
+
+
+.typeahead-badges {
+    padding-left: 2rem;
+}
+
+.typeahead-badges span {
+    margin-right: 1rem;
+}
+
+
+video {
+    height: 100%;
 }

@@ -5,9 +5,8 @@
 @endsection
 
 @section('style-header')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@voerro/vue-tagsinput@2.7.1/dist/style.css">
 <link rel="stylesheet" href="../css/add.css">
-<script src="https://unpkg.com/vue-select@latest"></script>
-
 
 @endsection
 
@@ -37,35 +36,30 @@
             <textarea name="description" name="" id="" placeholder="Description"></textarea>
         </div>
         <div class="field">
-            <v-multiselect v-model="tagValues" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="id" :options="tagOptions" :multiple="true" :taggable="true"></v-multiselect>
+            <tags-input name="tags" element-id="tags"
+                v-model="selectedTags"
+                placeholder="Add a skill"
+                :typeahead="true"
+                :typeahead-hide-discard="true"
+                :only-existing-tags="true"
+                :existing-tags="existingTags"
+                id-field="id"
+                text-field="name">
+            </tags-input>
         </div>
-        <div class="field location-badges">
-            <v-multiselect v-model="badgeValue" placeholder="Select your Location" label="id" track-by="id" :options="badgeOptions" :option-height="104" :custom-label="customLabel" :show-labels="false">
-                <template slot="option" slot-scope="props"><img class="option__image" :src="props.option.img" alt="Select your Location">
-                    <div class="option__desc"><span class="option__title">@{{ props.option.title }}</span></div>
-                </template>
-                <template slot="singleLabel" slot-scope="props"><img class="option__image" :src="props.option.img" alt="Select your Location"><span class="option__desc"><span class="option__title">@{{ props.option.title }}</span></span></template>
-              </v-multiselect>
-        </div>
-        <input name="tags" v-model="tags" type="text" hidden>
-        <input name="badge" v-model="badge" type="text" hidden>
-        <button type="submit" >Publish</button>
+        <button type="submit">Publish</button>
     </form>
 </main>
 @endsection
 
 @section('vuejs')
 
-
-<script src="https://unpkg.com/vue-multiselect@2.1.0"></script>
-<link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@voerro/vue-tagsinput@2.7.1/dist/voerro-vue-tagsinput.js"></script>
 
 <script>
     var app = new Vue({
         el: '#body',
-        components: {
-            "v-multiselect": window.VueMultiselect.default,
-        },
+        components: { "tags-input": VoerroTagsInput },
         data: {
             selectedTags: [],
             existingTags: [],
@@ -73,22 +67,6 @@
             token: '',
             media: '',
             isVideo: false,
-            badge: [],
-            tags: [],
-            tagValues: [],
-            tagOptions: [],
-            badgeValue: '',
-            badgeOptions: [
-                { title: ' Pirate',  img: '' },
-            ],
-        },
-        watch: {
-            tagValues: function(){
-                this.tags = JSON.stringify(this.tagValues);
-            },
-            badgeValue: function(){
-                this.badge = JSON.stringify(this.badgeValue);
-            },
         },
         methods: {
             settings: function() {
@@ -109,15 +87,11 @@
                 }
                 this.media = URL.createObjectURL(file);
             },
-            customLabel: function({ title, desc }) {
-                return `${title} – ${desc}`
-            },
         },
         mounted() {
             this.token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-            this.tagOptions = JSON.parse({!! json_encode($tags) !!});
+            this.existingTags = JSON.parse({!! json_encode($tags) !!});
             this.auth = JSON.parse({!! json_encode($auth) !!});
-            this.badgeOptions = JSON.parse({!! json_encode($badges) !!});
         }
     })
 </script>
@@ -154,44 +128,6 @@
     .tags-input-remove:before, .tags-input-remove:after {
         background-color: black;
     }
-
-    .location-badges .multiselect__option, .location-badges .multiselect__single{
-        display: flex;
-        flex-direction: row-reverse;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .location-badges .multiselect__option img, .location-badges .multiselect__single img {
-        width: 10rem;
-        margin-right: 4rem
-    }
-
-    .multiselect__single {
-        padding-left: 1rem;
-        margin-bottom: unset;
-        font-size: 1.3rem;
-        opacity: 0.5;
-
-    }
-
-    .multiselect__input, .multiselect__single {
-        margin-bottom: unset;
-        background: transparent
-    }
-
-    .multiselect__tags {
-        margin-top: 0;
-        margin-bottom: 0 !important;
-        display: flex;
-        padding: unset;
-        border-radius: 5px;
-        border: 1px solid #e8e8e8;
-        background: transparent;
-        font-size: 14px;
-        align-items: center;
-    }
-
 </style>
 @endsection
 
