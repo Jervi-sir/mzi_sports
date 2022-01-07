@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
@@ -39,6 +40,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/likePost', [LikeController::class, 'like'])->name('like');
     Route::post('/unlikePost', [LikeController::class, 'unlike'])->name('unlike');
 });
+
+Route::middleware(['auth', 'admin'])->group(function() {
+    Route::get('admin/tags', [AdminController::class, 'showTags'])->name('tags.show');
+    Route::post('admin/tags', [AdminController::class, 'saveTag'])->name('tag.save');
+});
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

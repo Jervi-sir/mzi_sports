@@ -40,6 +40,9 @@
                     <img src="../pics/heart_full.svg" alt="">
                 </a>
             </div>
+            <div class="ago">
+                @{{result.created_at}}
+            </div>
         </div>
     </div>
 

@@ -18,8 +18,7 @@ body {
 
 /*----- heights ------*/
 header {
-    height: 5vh;
-    background: linear-gradient( 180deg, #4B71EC 2.6%, #435ECE 56.9%, #353AA8 100%);
+    height: 10vh;
 }
 
 main {
@@ -34,9 +33,6 @@ header {
     align-items: center;
     justify-content: center;
 }
-header img {
-    filter: invert(1);
-}
 
 
 /*------- FOOTER -------*/
@@ -48,8 +44,3 @@ footer h6 {
     font-size: 1rem;
 }
 /*------- MENU --------*/
-
-.body {
-    width: 50%;
-    margin: auto;
-}

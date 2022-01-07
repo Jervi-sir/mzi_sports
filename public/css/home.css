@@ -2,6 +2,13 @@ header {
     height: 10vh;
 }
 
+header {
+    background: linear-gradient( 180deg, #4B71EC 2.6%, #435ECE 56.9%, #353AA8 100%);
+
+}
+header img {
+    filter: invert(1);
+}
 
 /*---- Tabs----*/
 

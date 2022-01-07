@@ -29,5 +29,6 @@
     @yield('vuejs')
     @yield('style-footer')
 
+    <link rel="stylesheet" href="../css/responsivity.css">
 </body>
 </html>

@@ -43,6 +43,7 @@ class HomeController extends Controller
                 'type' => $post->type,
                 'liked' => $likes->contains($auth->id) ? true : false,
                 'nbLikes' => $likes->count(),
+                'created_at' => $post->created_at->diffForHumans(),
             ];
         }
 
@@ -65,6 +66,7 @@ class HomeController extends Controller
                 'type' => $post->type,
                 'liked' => true,
                 'nbLikes' => $post->usersLike->count(),
+                'created_at' => $post->created_at->diffForHumans(),
             ];
         }
 

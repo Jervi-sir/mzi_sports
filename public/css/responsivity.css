@@ -1,0 +1,43 @@
+.body, .menu, .settings {
+    width: 30%;
+    margin: auto;
+}
+
+.settings.active {
+    left: 50%;
+    /* right: 50%; */
+    transition: 0.5s;
+    transform: translateX(-50%);
+}
+
+@media only screen and (max-width: 1300px){
+	.body, .menu, .settings {
+        width: 60%;
+    }
+    .settings.active {
+        left: 50%;
+        transition: 0.5s;
+        transform: translateX(-50%);
+    }
+}
+
+@media only screen and (max-width: 869px){
+	.body, .menu, .settings {
+        width: 100%;
+    }
+    .settings.active {
+        left: 0%;
+        transition: 0.5s;
+        transform: translateX(0%);
+    }
+}
+@media only screen and (max-width: 425px){
+	.body, .menu, .settings {
+        width: 100%;
+    }
+
+    .preview-image {
+        width: 40vw;
+        height: 40vw;
+    }
+}
