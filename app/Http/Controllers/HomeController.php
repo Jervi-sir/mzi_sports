@@ -41,6 +41,7 @@ class HomeController extends Controller
         $auth = Auth()->user();
         foreach ($posts as $key => $post) {
             $likes = $post->usersLike;
+            $nbLikes = $post->usersLike->count();
             $data[$key] = [
                 'url' => $base1 . $post->media_link,             //use uuid
                 'name' => $post->name,
@@ -50,8 +51,9 @@ class HomeController extends Controller
                 'tags' => $post->tags,
                 'others' => $post->others,
                 'type' => $post->type,
+                'sharefb' => 'https://www.facebook.com/sharer/sharer.php?u=0' . $base1 . $post->media_link,
                 'liked' => $likes->contains($auth->id) ? true : false,
-                'nbLikes' => $likes->count(),
+                'nbLikes' => $nbLikes < 2 ? $nbLikes . ' Like' : $nbLikes . ' Likes',
                 'created_at' => $post->created_at->diffForHumans(),
             ];
         }
@@ -64,6 +66,7 @@ class HomeController extends Controller
         $base1 = URL::to('/p') . '/';
         $posts = Post::all();
         foreach ($posts as $key => $post) {
+            $nbLikes = $post->usersLike->count();
             $data[$key] = [
                 'url' => $base1 . $post->media_link,             //use uuid
                 'name' => $post->name,
@@ -73,8 +76,9 @@ class HomeController extends Controller
                 'tags' => $post->tags,
                 'others' => $post->others,
                 'type' => $post->type,
+                'sharefb' => 'https://www.facebook.com/sharer/sharer.php?u=0' . $base1 . $post->media_link,
                 'liked' => true,
-                'nbLikes' => $post->usersLike->count(),
+                'nbLikes' => $nbLikes < 2 ? $nbLikes . ' Like' : $nbLikes . ' Likes',
                 'created_at' => $post->created_at->diffForHumans(),
             ];
         }

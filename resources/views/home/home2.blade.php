@@ -37,14 +37,21 @@
             </a>
             <div class="stats">
                 <a :id="'like_post' + index" v-if="!result.liked" href="#" class="heart" @click.prevent="like(result.media_link, index)">
-                    <img src="../pics/heart.svg" alt="">
+                    <img src="../pics/heart_empty_black.svg" alt="">
+                    <span>@{{ result.nbLikes }}</span>
                 </a>
                 <a v-else href="#" class="heart" @click.prevent="unlike(result.media_link, index)">
-                    <img src="../pics/heart_full.svg" alt="">
+                    <img src="../pics/heart_full_black.svg" alt="">
+                    <span>@{{ result.nbLikes }}</span>
                 </a>
-            </div>
-            <div class="ago">
-                @{{result.created_at}}
+                <div class="ago">
+                    @{{result.created_at}}
+                </div>
+                <a class='share-btn share-btn-facebook' :href="result.sharefb" rel='nofollow' target='_blank'>
+                    <img src="../pics/share.svg" alt="">
+                </a>
+
+
             </div>
         </div>
     </div>

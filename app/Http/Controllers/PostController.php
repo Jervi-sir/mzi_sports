@@ -46,7 +46,7 @@ class PostController extends Controller
         $badge = json_decode($request->badge);
         //upload media
         //$path = $request->file('media')->store('media');
-        $uploadedFileUrl = $this->cloudUploadFile($request->file('media'), $isWithBadge = false, $badge);
+        $uploadedFileUrl = $this->cloudUploadFile($request->file('media'), $isWithBadge = true, $badge);
 
         $post = new Post;
         $post->user_id = Auth()->user()->id;
