@@ -18,7 +18,7 @@
             <a href="#" @click="filterByTag(tag, index)" :class="{ active: tag.active }">@{{ tag.name }}</a>
         </span>
         <span>
-            <a href="#"> + </a>
+            <a href="{{ route('tags.list') }}"> see more ... </a>
         </span>
     </div>
     <div class="tab-title">

@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/', function () { return view('welcome'); });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/tag-list', [HomeController::class, 'tagList'])->name('tags.list');
 
 Route::get('/p/{uuid}', [PostController::class, 'view'])->name('post.view');
 

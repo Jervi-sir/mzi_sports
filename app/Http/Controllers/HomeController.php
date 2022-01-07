@@ -17,7 +17,7 @@ class HomeController extends Controller
         } else {
             $data['posts'] = $this->getPosts();
         }
-        $data['tags'] = $this->getTags();
+        $data['tags'] = $this->getTenTags(2);
         $data['auth'] = Helper::getAuth();
 
         return view('home.home2', ['posts' => json_encode($data['posts']),
@@ -25,10 +25,19 @@ class HomeController extends Controller
                                     'tags' => json_encode($data['tags'])]);
     }
 
+    public function tagList() {
+        $tags = Tag::orderBy('name', 'asc')->get();
+        $data['tags'] = $this->getTags();
+        $data['auth'] = Helper::getAuth();
+
+        return view('home.tagList', ['auth' => json_encode($data['auth']),
+                                    'tags' => json_encode($data['tags'])]);
+    }
+
     private function getPostsOnAuth()
     {
         $base1 = URL::to('/p') . '/';
-        $posts = Post::all();
+        $posts = Post::latest()->get();
         $auth = Auth()->user();
         foreach ($posts as $key => $post) {
             $likes = $post->usersLike;
@@ -75,7 +84,21 @@ class HomeController extends Controller
 
     private function getTags()
     {
-        $tags = Tag::all();
+        $tags = Tag::orderBy('name', 'asc')->get();
+        foreach ($tags as $key => $tag) {
+            $data[$key] = [
+                'id' => $tag->id,
+                'name' => $tag->name,
+                'active' => false,
+            ];
+        }
+
+        return $data;
+    }
+
+    private function getTenTags($amount = 10)
+    {
+        $tags = Tag::latest()->take($amount)->get();
         foreach ($tags as $key => $tag) {
             $data[$key] = [
                 'id' => $tag->id,
