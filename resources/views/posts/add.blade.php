@@ -68,8 +68,6 @@
 @section('vuejs')
 <script src="https://unpkg.com/vue-multiselect@2.1.0"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css">
-<script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
-
 <script>
     var app = new Vue({
         el: '#body',

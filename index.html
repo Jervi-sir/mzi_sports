@@ -2,137 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
-
+    <title>JavaScript File Upload</title>
 </head>
 <body>
-    <nav>
-        <div class="logo"><h1>Jervi</h1></div>
-        <div class="openMenu"><i class="fa fa-bars"></i></div>
-        <ul class="mainMenu">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Products</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">About</a></li>
-            <div class="closeMenu"><i class="fa fa-times"></i></div>
-            <span class="icons">
-                <i class="fab fa-facebook"></i>
-                <i class="fab fa-instagram"></i>
-                <i class="fab fa-youtube"></i>
-                <i class="fab fa-github"></i>
-            </span>
-        </ul>
-    </nav>
+      <button id="upload_widget" class="cloudinary-button">Upload files</button>
 
-    <script>
-        const mainMenu = document.querySelector('.mainMenu');
-        const closeMenu = document.querySelector('.closeMenu');
-        const openMenu = document.querySelector('.openMenu');
+     <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+     <script type="text/javascript">
+  var widget = cloudinary.applyUploadWidget({
+    cloudName: 'demo',
+    uploadPreset: 'blog_upload' },
+    (error, result) => {
+       if (!error && result && result.event === "success") {
+            console.log('Done uploading..: ', result.info);
+          }
 
-        openMenu.addEventListener('click',show);
-        closeMenu.addEventListener('click',close);
+     });
 
-        function show(){
-        mainMenu.style.top = '0';
-        }
-        function close(){
-        mainMenu.style.top = '-100%';
-        }
-    </script>
-
-    <style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-
-    }
-    body  {
-        font-family: 'Arial' , sans-serif;
-    }
-    nav {
-        background: #000;
-        color: #fff;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    nav .mainMenu {
-        display: flex;
-        list-style: none;
-    }
-    nav .mainMenu li a {
-        display: inline-block;
-        padding: 15px;
-        text-decoration: none;
-        text-transform: uppercase;
-        color: #fff;
-        font-size: 1.5rem;
-    }
-    nav .mainMenu li a:hover {
-        background: rgb(255,94,0);
-    }
-    nav .openMenu {
-        font-size: 2rem;
-        margin: 20px;
-        display: none;
-        cursor: pointer;
-    }
-    nav .mainMenu .closeMenu , .icons i {
-        font-size: 2rem;
-        display: none;
-        cursor: pointer;
-    }
-    .fab:hover {
-        color: rgb(0, 110, 255);
-        transition: 0.5s;
-    }
-
-    nav .logo {
-        margin: 6px;
-        font-size: 25px;
-        cursor: pointer;
-    }
-    @media(max-width: 800px){
-        nav .mainMenu {
-            height: 100vh;
-            position: fixed;
-            top: -100%;
-            right: 0;
-            left: 0;
-            z-index: 10;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: #000;
-            transition: top 1s ease;
-            display: flex;
-        }
-        nav .mainMenu .closeMenu {
-            display: block;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-
-        }
-        nav .openMenu {
-            display: block;
-        }
-        nav .mainMenu li a:hover {
-            background: none;
-            color: rgb(255, 123, 0);
-            font-size: 1.6rem;
-        }
-        .icons i {
-            display: inline-block;
-            padding: 12px;
-        }
-    }
-    </style>
-
-
+   document.getElementById("upload_widget").addEventListener("click", function(){
+    myWidget.open();
+  }, false);
+     </script>
 </body>
 </html>

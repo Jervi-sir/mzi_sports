@@ -29,8 +29,11 @@
 
     <div class="result-wide">
         <div href="#" class="card" v-for="(result, index) in results">
-            <a :href="result.url">
+            <a :href="result.url" v-if="result.type != 'video'">
                 <img class="card-img" :src="result.media" alt="">
+            </a>
+            <a :href="result.url" v-else>
+                <video :src="result.media" controls/>
             </a>
             <div class="stats">
                 <a :id="'like_post' + index" v-if="!result.liked" href="#" class="heart" @click.prevent="like(result.media_link, index)">

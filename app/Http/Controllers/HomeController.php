@@ -45,7 +45,7 @@ class HomeController extends Controller
                 'url' => $base1 . $post->media_link,             //use uuid
                 'name' => $post->name,
                 'media_link' => $post->media_link,
-                'media' => $post->media,
+                'media' => $post->thumbnail,
                 'description' => $post->description,
                 'tags' => $post->tags,
                 'others' => $post->others,
@@ -68,7 +68,7 @@ class HomeController extends Controller
                 'url' => $base1 . $post->media_link,             //use uuid
                 'name' => $post->name,
                 'media_link' => $post->media_link,
-                'media' => $post->media,
+                'media' => $post->thumbnail,
                 'description' => $post->description,
                 'tags' => $post->tags,
                 'others' => $post->others,
