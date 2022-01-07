@@ -31,7 +31,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #C4C4C4;
+    background-color: #000000;
     border-radius: 1rem;
     overflow: hidden;
 }
@@ -166,4 +166,5 @@ button {
 
 video {
     height: 100%;
+    width: 100%;
 }
