@@ -17,7 +17,7 @@ class HomeController extends Controller
         } else {
             $data['posts'] = $this->getPosts();
         }
-        $data['tags'] = $this->getTenTags(2);
+        $data['tags'] = $this->getTenTags(5);
         $data['auth'] = Helper::getAuth();
 
         return view('home.home2', ['posts' => json_encode($data['posts']),
