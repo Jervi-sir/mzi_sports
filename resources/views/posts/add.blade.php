@@ -23,7 +23,7 @@
     <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div v-if="isVideo === true"  class="preview-image">
-            <video :src="media" controls/>
+            <video width="100%" height="100%" :src="media" controls/>
         </div>
         <div v-else class="preview-image">
             <img :src="media" onerror="" alt="">
