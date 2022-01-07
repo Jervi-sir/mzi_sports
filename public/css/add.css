@@ -38,7 +38,9 @@ main {
 
 .preview-image img{
     height: 100%;
+    width: 100%;
     margin: auto;
+    object-fit: contain;
 }
 
 .field,.multiselect__tags {
@@ -167,4 +169,18 @@ button {
 video {
     height: 100%;
     width: 100%;
+}
+
+.error {
+    color: rgb(235, 41, 50);
+    font-size: 1.2rem;
+    padding-left: 1rem;
+}
+
+.field.error-input {
+    border: 1px solid rgb(235, 41, 50);
+}
+
+.field.error-input label {
+    color: rgba(235, 41, 51, 0.63);
 }

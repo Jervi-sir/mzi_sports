@@ -25,21 +25,29 @@
         <div v-if="isVideo === true"  class="preview-image">
             <video :src="media" controls/>
         </div>
-        <div v-else  class="preview-image">
-            <img :src="media" alt="">
+        <div v-else class="preview-image">
+            <img :src="media" onerror="" alt="">
         </div>
-
-        <div class="field add-file" >
-            <label for="add-file">add image</label>
-            <input name="media" @change="onFileChange" id="add-file" type="file" placeholder="add image" accept="video/mp4,video/x-m4v,video/*,image/*" >
+        <div class="field add-file" :class="errorDetected.media ? 'error-input' : ''">
+            <label for="add-file">add image or video</label>
+            <input name="media" @change="onFileChange" id="add-file" type="file" placeholder="add image" accept="video/mp4,video/x-m4v,video/*,image/*" required>
         </div>
-        <div class="field">
-            <textarea name="description" name="" id="" placeholder="Description"></textarea>
+        <span class="error" v-if="errorDetected.media">
+            @{{errorText.media}}
+        </span>
+        <div class="field" :class="errorDetected.description ? 'error-input' : ''">
+            <textarea v-model="description" name="description" name="" id="" placeholder="Description" required></textarea>
         </div>
-        <div class="field">
+        <span class="error" v-if="errorDetected.description">
+            @{{errorText.description}}
+        </span>
+        <div class="field" :class="errorDetected.tags ? 'error-input' : ''">
             <v-multiselect v-model="tagValues" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="id" :options="tagOptions" :multiple="true" :taggable="true"></v-multiselect>
         </div>
-        <div class="field location-badges">
+        <span class="error" v-if="errorDetected.tags">
+            @{{errorText.tags}}
+        </span>
+        <div class="field location-badges" :class="errorDetected.badge ? 'error-input' : ''">
             <v-multiselect v-model="badgeValue" placeholder="Select your Location" label="id" track-by="id" :options="badgeOptions" :option-height="104" :custom-label="customLabel" :show-labels="false">
                 <template slot="option" slot-scope="props"><img class="option__image" :src="props.option.img" alt="Select your Location">
                     <div class="option__desc"><span class="option__title">@{{ props.option.title }}</span></div>
@@ -47,18 +55,20 @@
                 <template slot="singleLabel" slot-scope="props"><img class="option__image" :src="props.option.img" alt="Select your Location"><span class="option__desc"><span class="option__title">@{{ props.option.title }}</span></span></template>
               </v-multiselect>
         </div>
-        <input name="tags" v-model="tags" type="text" hidden>
-        <input name="badge" v-model="badge" type="text" hidden>
-        <button type="submit" >Publish</button>
+        <span class="error" v-if="errorDetected.badge">
+            @{{errorText.badge}}
+        </span>
+        <input name="tags" v-model="tags" type="text" hidden required>
+        <input name="badge" v-model="badge" type="text" hidden required>
+        <button type="submit" @click="verifySubmition">Publish</button>
     </form>
 </main>
 @endsection
 
 @section('vuejs')
-
-
 <script src="https://unpkg.com/vue-multiselect@2.1.0"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css">
+<script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
 
 <script>
     var app = new Vue({
@@ -67,30 +77,49 @@
             "v-multiselect": window.VueMultiselect.default,
         },
         data: {
-            selectedTags: [],
-            existingTags: [],
             auth: [],
             token: '',
-            media: '',
+            media: ' ',
             isVideo: false,
-            badge: [],
+            description: '',
+
             tags: [],
             tagValues: [],
             tagOptions: [],
+
+            badge: [],
             badgeValue: '',
-            badgeOptions: [
-                { title: ' Pirate',  img: '' },
-            ],
-        },
-        watch: {
-            tagValues: function(){
-                this.tags = JSON.stringify(this.tagValues);
+            badgeOptions: [{ title: ' Pirate',  img: '' }],
+
+            errorDetected: {
+                media: false,
+                tags: false,
+                badge: false,
+                description: false,
             },
-            badgeValue: function(){
-                this.badge = JSON.stringify(this.badgeValue);
-            },
+            errorText: {
+                media: 'media missing',
+                tags: 'tags missing',
+                badge: 'location missing',
+                description: 'description missing',
+            }
         },
         methods: {
+            verifySubmition: function() {
+                //check if media exists
+                if(this.media.replace(/\s+/g, '') == '') {
+                    this.errorDetected.media = true;
+                }
+                if(this.tags.length === 0) {
+                    this.errorDetected.tags = true;
+                }
+                if(this.badge.length === 0) {
+                    this.errorDetected.badge = true;
+                }
+                if(this.description.length === 0) {
+                    this.errorDetected.description = true;
+                }
+            },
             settings: function() {
                 var menu = document.getElementById('mobile-setting');
                 menu.classList.add('active');
@@ -102,6 +131,7 @@
             onFileChange: function(e) {
                 const file = e.target.files[0];
                 const type = file.type.includes('video');
+                this.errorDetected.media = false;
                 if(type) {
                     this.isVideo = true;
                 } else {
@@ -111,6 +141,23 @@
             },
             customLabel: function({ title, desc }) {
                 return `${title} – ${desc}`
+            },
+            fillingDescription: function() {
+                this.errorDetected.description = false;
+            },
+
+        },
+        watch: {
+            tagValues: function(){
+                this.errorDetected.tags = false;
+                this.tags = JSON.stringify(this.tagValues);
+            },
+            badgeValue: function(){
+                this.errorDetected.badge = false;
+                this.badge = JSON.stringify(this.badgeValue);
+            },
+            description: function(){
+                this.errorDetected.description = false;
             },
         },
         mounted() {

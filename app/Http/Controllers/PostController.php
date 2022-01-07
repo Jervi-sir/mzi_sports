@@ -31,6 +31,11 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'description' => ['required', 'string', 'max:255'],
+            'tags' => ['required', 'string', 'max:255'],
+            'badge' => ['required', 'string', 'max:255'],
+        ]);
 
         // Tag String
         $tagsName = Helper::tagToString(json_decode($request->tags));
