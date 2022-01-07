@@ -41,7 +41,7 @@ class PostController extends Controller
         $badge = json_decode($request->badge);
         //upload media
         //$path = $request->file('media')->store('media');
-        $uploadedFileUrl = $this->cloudUploadFile($request->file('media'), $badge = true);
+        $uploadedFileUrl = $this->cloudUploadFile($request->file('media'), $isWithBadge = false, $badge);
 
         $post = new Post;
         $post->user_id = Auth()->user()->id;
@@ -90,10 +90,10 @@ class PostController extends Controller
     /*************************************** */
     /************** HELPERS **************** */
 
-    private function cloudUploadFile($file, $badge) {
+    private function cloudUploadFile($file, $isWithBadge, $badge) {
         // get media Type
         $mediaType = Helper::getMediaType($file);
-        if($badge) {
+        if($isWithBadge) {
             if($mediaType == 'image') {
                 $uploadedFileUrl = Cloudinary::upload($file->getRealPath(),[
                     'folder' => 'images',
