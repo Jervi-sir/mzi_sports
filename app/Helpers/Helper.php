@@ -66,6 +66,8 @@ class Helper
 
     static function getPost($post) {
         $baseUrl = URL::to('/');
+        $nbLikes = $post->usersLike->count();
+        $user = $post->user()->first();
         $data = [
             'id' => $post->id,
             'type' => $post->type,
@@ -74,6 +76,8 @@ class Helper
             'description' => $post->description,
             'tags' => $post->tags,
             'views' => '123',
+            'liked' => true,
+            'nbLikes' => $nbLikes < 2 ? $nbLikes . ' Like' : $nbLikes . ' Likes',
         ];
         return $data;
     }
@@ -119,19 +123,36 @@ class Helper
         $posts = $user->posts;
         $auth = Auth()->user();
         $data = [];
-        foreach ($posts as $key => $post) {
-            $likes = $post->usersLike;
-            $data[$key] = [
-                'type' => $post->type,
-                'url' => $base1 . $post->media_link,             //use uuid
-                'media' => $post->media,
-                'media_link' => $post->media_link,
-                'description' => $post->description,
-                'tags' => $post->tags,
-                'liked' => $likes->contains($auth->id) ? true : false,
-                'nbLikes' => $likes->count(),
-            ];
+        if($auth) {
+            foreach ($posts as $key => $post) {
+                $likes = $post->usersLike;
+                $data[$key] = [
+                    'type' => $post->type,
+                    'url' => $base1 . $post->media_link,             //use uuid
+                    'media' => $post->thumbnail,
+                    'media_link' => $post->media_link,
+                    'description' => $post->description,
+                    'tags' => $post->tags,
+                    'liked' => $likes->contains($auth->id) ? true : false,
+                    'nbLikes' => $likes->count(),
+                ];
+            }
+        } else {
+            foreach ($posts as $key => $post) {
+                $likes = $post->usersLike;
+                $data[$key] = [
+                    'type' => $post->type,
+                    'url' => $base1 . $post->media_link,             //use uuid
+                    'media' => $post->thumbnail,
+                    'media_link' => $post->media_link,
+                    'description' => $post->description,
+                    'tags' => $post->tags,
+                    'liked' => false,
+                    'nbLikes' => $likes->count(),
+                ];
+            }
         }
+
         return $data;
     }
 

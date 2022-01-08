@@ -37,7 +37,8 @@
     }
 
     .preview-image {
-        width: 40vw;
-        height: 40vw;
+        height: 100%;
+        width: 100%;
     }
+
 }

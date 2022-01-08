@@ -72,7 +72,8 @@ header a.back {
 }
 /*---- content ----*/
 .post .content{
-    height: 80%;
+    /*height: 80%;*/
+    margin: 2rem 0
 }
 
 .post .content .media {
@@ -81,7 +82,7 @@ header a.back {
     justify-content: center;
     overflow: hidden;
     height: 100%;
-    border-radius: 1.5rem;
+    /*border-radius: 1.5rem;*/
 }
 
 .post .content .media img {
@@ -134,4 +135,9 @@ header a.back {
     font-weight: 500;
     text-decoration: none;
     font-size: 1.5rem;
+}
+
+video {
+    height: 100%;
+    width: 100%;
 }

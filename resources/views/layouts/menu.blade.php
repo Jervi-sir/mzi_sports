@@ -6,6 +6,6 @@
         <img src="../pics/add.svg" alt="">
     </a>
     <a href="#" @click.prevent="settings">
-        <img src="../pics/setting.svg" alt="">
+        <img src="../pics/user.svg" alt="">
     </a>
 </div>

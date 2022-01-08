@@ -6,9 +6,8 @@
 
 @section('style-header')
 <link rel="stylesheet" href="../css/add.css">
+<link rel="stylesheet" href="../css/progressBar.css">
 <script src="https://unpkg.com/vue-select@latest"></script>
-
-
 @endsection
 
 @section('content')
@@ -19,6 +18,9 @@
     <h2>Post</h2>
     <a href="javascript:history.go(-1)" class="back"><img src="../pics/arrow-back.svg" alt=""></a>
 </header>
+<div v-if="progressBar">
+    @include('layouts.progress')
+</div>
 <main>
     <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -60,7 +62,7 @@
         </span>
         <input name="tags" v-model="tags" type="text" hidden required>
         <input name="badge" v-model="badge" type="text" hidden required>
-        <button type="submit" @click="verifySubmition">Publish</button>
+        <button type="submit" @click="verifySubmition" :disabled='submitDisable'>Publish</button>
     </form>
 </main>
 @endsection
@@ -75,6 +77,9 @@
             "v-multiselect": window.VueMultiselect.default,
         },
         data: {
+            submitDisable: false,
+            fileSize:'',
+            progressBar: false,
             auth: [],
             token: '',
             media: ' ',
@@ -107,15 +112,20 @@
                 //check if media exists
                 if(this.media.replace(/\s+/g, '') == '') {
                     this.errorDetected.media = true;
-                }
+                } else
                 if(this.tags.length === 0) {
                     this.errorDetected.tags = true;
-                }
+                } else
                 if(this.badge.length === 0) {
                     this.errorDetected.badge = true;
-                }
+                } else
                 if(this.description.length === 0) {
                     this.errorDetected.description = true;
+                } else {
+                    this.progressBar = true;
+                    setTimeout(() => {
+                        this.submitDisable = true
+                    }, 100);
                 }
             },
             settings: function() {
@@ -128,6 +138,7 @@
             },
             onFileChange: function(e) {
                 const file = e.target.files[0];
+                this.fileSize = this.niceBytes(file.size);
                 const type = file.type.includes('video');
                 this.errorDetected.media = false;
                 if(type) {
@@ -143,6 +154,14 @@
             fillingDescription: function() {
                 this.errorDetected.description = false;
             },
+            niceBytes: function(x){
+                const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+                let l = 0, n = parseInt(x, 10) || 0;
+                while(n >= 1024 && ++l){
+                    n = n/1024;
+                }
+                return(n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
+            }
 
         },
         watch: {
@@ -160,9 +179,10 @@
         },
         mounted() {
             this.token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-            this.tagOptions = JSON.parse({!! json_encode($tags) !!});
-            this.auth = JSON.parse({!! json_encode($auth) !!});
-            this.badgeOptions = JSON.parse({!! json_encode($badges) !!});
+            var data = JSON.parse({!! json_encode($data) !!});
+            this.tagOptions = data.tags;
+            this.auth = data.auth;
+            this.badgeOptions = data.badges;
         }
     })
 </script>

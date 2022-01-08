@@ -17,6 +17,11 @@ header a.back {
     text-align: end;
 }
 
+main {
+    width: 90%;
+    margin: auto;
+}
+
 /*-------- profile-top -------*/
 .profile-top {
     display: flex;

@@ -47,16 +47,23 @@
             </div>
         </div>
         <div class="content">
-            <div class="media">
+            <div class="media" v-if="post.type === 'video' " >
+                <video :src="post.media" controls/>
+                <img class="play-button" src="../pics/play_button.svg" alt="">
+            </div>
+            <div class="media" v-else>
                 <img :src="post.media" alt="">
-                <img v-if="post.type === 'video' " class="play-button" src="../pics/play_button.svg" alt="">
             </div>
         </div>
         <div class="reactions">
-            <form action="">
-                @csrf
-                <button type="submit"><img src="../pics/heart_empty_black.svg" alt=""></button>
-            </form>
+            <a id='like_post' v-if="!post.liked" href="#" class="heart" @click.prevent="like(post.media_link)">
+                <img src="../pics/heart_empty_black.svg" alt="">
+                <span>@{{ post.nbLikes }}</span>
+            </a>
+            <a v-else href="#" class="heart" @click.prevent="unlike(post.media_link)">
+                <img src="../pics/heart_full_black.svg" alt="">
+                <span>@{{ post.nbLikes }}</span>
+            </a>
             <div class="views">
                 @{{ post.views }}
             </div>
@@ -141,16 +148,72 @@
                         }
                     })
                     .catch((error) => {console.log(error)});
+            },
+            like: function(media_link) {
+                const url = '{!! route('like') !!}';
+
+                let fetchData = {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        media_link: media_link,
+                    }),
+                    headers: new Headers({
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text-plain, */*",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": this.token
+                    })
+                }
+                fetch(url, fetchData)
+                    .then(response => response.json())
+                    .then((data) => {
+                        if(data['response'] == true) {
+                            //this.following = true;
+                            this.post.liked = true;
+                            var ele = 'like_post';
+                            document.getElementById(ele).classList.add('liked');
+                        }
+                    })
+                    .catch((error) => {console.log(error)});
+            },
+            unlike: function(media_link) {
+                const url = '{!! route('unlike') !!}';
+
+                let fetchData = {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        media_link: media_link,
+                    }),
+                    headers: new Headers({
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text-plain, */*",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": this.token
+                    })
+                }
+                fetch(url, fetchData)
+                    .then(response => response.json())
+                    .then((data) => {
+                        if(data['response'] == true) {
+                            //this.following = false;
+                            var ele = 'like_post';
+                            setTimeout(function() {
+                                document.getElementById(ele).classList.remove('liked');
+                            }, 10);
+                            this.post.liked = false;
+                        }
+                    })
+                    .catch((error) => {console.log(error)});
             }
         },
         mounted() {
             this.token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-            this.post = JSON.parse({!! json_encode($post) !!});
-            this.user = JSON.parse({!! json_encode($user) !!});
-            this.auth = JSON.parse({!! json_encode($auth) !!});
-            this.following = JSON.parse({!! json_encode($doesFollow) !!});
-            console.log(this.user)
-            console.log(this.auth)
+            var data = JSON.parse({!! json_encode($data) !!});
+            this.post = data.post;
+            this.user = data.user;
+            this.auth = data.auth;
+            console.log(this.post);
+            this.following = data.doesFollow;
         }
     })
 </script>

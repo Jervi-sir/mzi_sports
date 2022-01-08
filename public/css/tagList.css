@@ -1,0 +1,57 @@
+.tags-list {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    height: 100vh;
+    width: 100%;
+    background-color: #F8F8F8;
+    z-index: 100;
+    transition: 0.5s;
+}
+
+.tags-list.active {
+    left: 0;
+    transition: 0.5s;
+}
+
+.tags-list .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    margin: auto;
+    height: 10vh;
+}
+
+.tags-list .back, .tags-list .back {
+    width: 4rem;
+    height: 4rem;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+/*----- tag lists ------*/
+.tags-list .main {
+    margin-top: 5rem;
+    padding: 0 2rem;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.tags-list span {
+    background-color: white;
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+}
+
+.tags-list span a {
+    text-decoration: none;
+    color: black;
+    font-size: 1.5rem;
+}
+
+

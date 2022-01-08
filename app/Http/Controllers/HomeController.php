@@ -17,44 +17,41 @@ class HomeController extends Controller
         } else {
             $data['posts'] = $this->getPosts();
         }
-        $data['tags'] = $this->getTenTags(5);
+        $data['tags'] = $this->getNTags(5);
+        $data['allTags'] = $this->getTags();
         $data['auth'] = Helper::getAuth();
 
-        return view('home.home2', ['posts' => json_encode($data['posts']),
-                                    'auth' => json_encode($data['auth']),
-                                    'tags' => json_encode($data['tags'])]);
-    }
-
-    public function tagList() {
-        $tags = Tag::orderBy('name', 'asc')->get();
-        $data['tags'] = $this->getTags();
-        $data['auth'] = Helper::getAuth();
-
-        return view('home.tagList', ['auth' => json_encode($data['auth']),
-                                    'tags' => json_encode($data['tags'])]);
+        return view('home.home2', ['data' => json_encode($data)]);
     }
 
     private function getPostsOnAuth()
     {
+        $baseUrl = URL::to('/');
         $base1 = URL::to('/p') . '/';
         $posts = Post::latest()->get();
         $auth = Auth()->user();
         foreach ($posts as $key => $post) {
             $likes = $post->usersLike;
             $nbLikes = $post->usersLike->count();
+            $user = $post->user()->first();
             $data[$key] = [
                 'url' => $base1 . $post->media_link,             //use uuid
                 'name' => $post->name,
                 'media_link' => $post->media_link,
-                'media' => $post->thumbnail,
+                'media' => $post->media,
                 'description' => $post->description,
                 'tags' => $post->tags,
                 'others' => $post->others,
                 'type' => $post->type,
                 'sharefb' => 'https://www.facebook.com/sharer/sharer.php?u=0' . $base1 . $post->media_link,
                 'liked' => $likes->contains($auth->id) ? true : false,
-                'nbLikes' => $nbLikes < 2 ? $nbLikes . ' Like' : $nbLikes . ' Likes',
+                'nbLikes' => $nbLikes,
                 'created_at' => $post->created_at->diffForHumans(),
+                'user' => [
+                    'name' => $user->name,
+                    'profile_link' => $baseUrl . '/u' . '/' . $user->uuid,
+                    'pic' => $user->pic,
+                ]
             ];
         }
 
@@ -64,22 +61,29 @@ class HomeController extends Controller
     private function getPosts()
     {
         $base1 = URL::to('/p') . '/';
+        $baseUrl = URL::to('/');
         $posts = Post::all();
         foreach ($posts as $key => $post) {
             $nbLikes = $post->usersLike->count();
+            $user = $post->user()->first();
             $data[$key] = [
                 'url' => $base1 . $post->media_link,             //use uuid
                 'name' => $post->name,
                 'media_link' => $post->media_link,
-                'media' => $post->thumbnail,
+                'media' => $post->media,
                 'description' => $post->description,
                 'tags' => $post->tags,
                 'others' => $post->others,
                 'type' => $post->type,
                 'sharefb' => 'https://www.facebook.com/sharer/sharer.php?u=0' . $base1 . $post->media_link,
                 'liked' => true,
-                'nbLikes' => $nbLikes < 2 ? $nbLikes . ' Like' : $nbLikes . ' Likes',
+                'nbLikes' => $nbLikes,
                 'created_at' => $post->created_at->diffForHumans(),
+                'user' => [
+                    'name' => $user->name,
+                    'profile_link' => $baseUrl . '/u' . '/' . $user->uuid,
+                    'pic' => $user->pic,
+                ]
             ];
         }
 
@@ -100,7 +104,7 @@ class HomeController extends Controller
         return $data;
     }
 
-    private function getTenTags($amount = 10)
+    private function getNTags($amount = 10)
     {
         $tags = Tag::latest()->take($amount)->get();
         foreach ($tags as $key => $tag) {
@@ -113,6 +117,4 @@ class HomeController extends Controller
 
         return $data;
     }
-
-
 }

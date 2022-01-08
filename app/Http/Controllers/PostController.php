@@ -21,10 +21,7 @@ class PostController extends Controller
         $data['auth'] = Helper::getAuth();
         $data['badges'] = Helper::getBadges();
 
-        return view('posts.add', ['tags' => json_encode($data['tags']),
-                                    'auth' => json_encode($data['auth']),
-                                    'badges' => json_encode($data['badges'])
-                                ]);
+        return view('posts.add', ['data' => json_encode($data)] );
     }
 
 
@@ -85,10 +82,9 @@ class PostController extends Controller
             }
         }
 
-        return view('posts.view', ['post' => json_encode($data['post']),
-                                    'auth' => json_encode($data['auth']),
-                                    'user' => json_encode($data['user']),
-                                    'doesFollow' => json_encode($doesFollow)]);
+        $data['doesFollow'] = $doesFollow;
+
+        return view('posts.view', ['data' => json_encode($data)]);
     }
 
 
@@ -100,20 +96,34 @@ class PostController extends Controller
         ini_set('post_max_size', '100M');
         ini_set('max_input_time', 365);
         ini_set('max_execution_time', 365);
+
+        $file_dimentions = getimagesize($file);
+        $file_width = $file_dimentions[0];
+        $file_height = $file_dimentions[1];
+        $scale = 'c_scale,w_' . number_format($file_width * 1 / 100) . '/';
+
+        $splitBadge = explode('upload/' ,$badge->img);
+        $injectScale = $splitBadge[0] . 'upload/' . $scale . $splitBadge[1];
+
+        $image = imagecreatefromjpeg($badge->img);
+        $img = imagescale( $image, 500, 400 );
+        dd(($img));
+
+        dd($injectScale);
         // get media Type
         $mediaType = Helper::getMediaType($file);
         if($isWithBadge) {
             if($mediaType == 'image') {
                 $uploadedFileUrl = Cloudinary::upload($file->getRealPath(),[
                     'folder' => 'images',
+                    'eager' => [['width' => 848,'height' => 480 ,'crop' => 'scale'],],
                     'transformation' => [
-                        'width' => 1080, 'height' => 1080, 'crop' => 'limit',
                         'overlay' => [
-                            'url' => $badge->img, 'flags' => 'layer_apply',
+                            'url' => $injectScale, 'flags' => 'layer_apply',
                             'public_id' => $badge->public_id,
                         ],
                         'gravity' => 'north_east',
-                        'x' => 30, 'y' => 30,
+                        'x' => 10, 'y' => 10,
                         'quality' => 'auto','fetch_format' => 'auto',
                     ]
                 ])->getSecurePath();
@@ -121,14 +131,15 @@ class PostController extends Controller
                 ini_set('max_execution_time', 180); //3 minutes
                 $uploadedFileUrl = Cloudinary::uploadVideo($file->getRealPath(), [
                     'folder' => 'video',
+                    'eager' => [['width' => 848,'height' => 480 ,'crop' => 'scale'],],
                     'transformation' => [
                         'quality' => 'auto',
                         'overlay' => [
-                            'url' => $badge->img, 'flags' => 'layer_apply',
+                            'url' => $injectScale, 'flags' => 'layer_apply',
                             'public_id' => $badge->public_id,
                         ],
                         'gravity' => 'north_east',
-                        'x' => 30, 'y' => 30
+                        'x' => 10, 'y' => 10,
                     ],
                 ])->getSecurePath();
             }
@@ -152,11 +163,5 @@ class PostController extends Controller
         }
         return $uploadedFileUrl;
     }
-
-
-
-
-
-
 }
 
