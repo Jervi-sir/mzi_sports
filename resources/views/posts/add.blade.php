@@ -25,10 +25,10 @@
     <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div v-if="isVideo === true"  class="preview-image">
-            <video width="100%" height="100%" :src="media" controls/>
+            <video id="video-preview" width="100%" height="100%" :src="media" controls/>
         </div>
         <div v-else class="preview-image">
-            <img :src="media" onerror="" alt="">
+            <img id="image-preview" :src="media" onerror="" alt="">
         </div>
         <div class="field add-file" :class="errorDetected.media ? 'error-input' : ''">
             <label for="add-file">add image or video</label>
@@ -62,6 +62,9 @@
         </span>
         <input name="tags" v-model="tags" type="text" hidden required>
         <input name="badge" v-model="badge" type="text" hidden required>
+        <input name="mediaHeight" v-model="mediaHeight" type="text" hidden required>
+        <input name="mediaWidth" v-model="mediaWidth" type="text" hidden required>
+        <input name="mediaSize" v-model="mediaSize" type="text" hidden required>
         <button type="submit" @click="verifySubmition" :disabled='submitDisable'>Publish</button>
     </form>
 </main>
@@ -78,11 +81,15 @@
         },
         data: {
             submitDisable: false,
-            fileSize:'',
             progressBar: false,
             auth: [],
             token: '',
             media: ' ',
+
+            mediaWidth: '',
+            mediaHeight: '',
+            mediaSize: '',
+
             isVideo: false,
             description: '',
 
@@ -138,15 +145,26 @@
             },
             onFileChange: function(e) {
                 const file = e.target.files[0];
-                this.fileSize = this.niceBytes(file.size);
+                this.mediaSize = this.niceBytes(file.size);
                 const type = file.type.includes('video');
                 this.errorDetected.media = false;
+                this.media = URL.createObjectURL(file);
                 if(type) {
                     this.isVideo = true;
+                    setTimeout(() => {
+                        var video = document.getElementById('video-preview');
+                        this.mediaHeight = video.videoHeight;
+                        this.mediaWidth = video.videoWidth;
+                    }, 50);
+
                 } else {
                     this.isVideo = false;
+                    setTimeout(() => {
+                        var image = document.getElementById('image-preview');
+                        this.mediaHeight = image.height;
+                        this.mediaWidth = image.width;
+                    }, 50);
                 }
-                this.media = URL.createObjectURL(file);
             },
             customLabel: function({ title, desc }) {
                 return `${title} – ${desc}`
@@ -176,6 +194,9 @@
             description: function(){
                 this.errorDetected.description = false;
             },
+            mediaData: function(){
+                this.mediaData = JSON.stringify(this.mediaData);
+            }
         },
         mounted() {
             this.token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");

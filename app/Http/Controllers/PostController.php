@@ -43,8 +43,10 @@ class PostController extends Controller
         //get location badge for watermark
         $badge = json_decode($request->badge);
         //upload media
+        $height = $request->mediaHeight;
+        $width = $request->mediaWidth;
         //$path = $request->file('media')->store('media');
-        $uploadedFileUrl = $this->cloudUploadFile($request->file('media'), $isWithBadge = true, $badge);
+        $uploadedFileUrl = $this->cloudUploadFile($request->file('media'), $isWithBadge = true, $badge, $height, $width);
 
         $post = new Post;
         $post->user_id = Auth()->user()->id;
@@ -92,65 +94,41 @@ class PostController extends Controller
     /*************************************** */
     /************** HELPERS **************** */
 
-    private function imageWatermarked($file, $badge) {
-        //get file dimentions
-        $file_dimentions = getimagesize($file);
-        $file_width = $file_dimentions[0];
-        //$file_height = $file_dimentions[1];
-
-        //create Badge scaled
-        $badge_width = number_format($file_width * 10 / 100);
-        $badgeObj = Image::make($badge->img);
-        $badgeScaled = ($badgeObj->resize($badge_width, null, function ($constraint) {
-            $constraint->aspectRatio();
-        }));
-
-        //create and apply watermark for the image
-        $mediaObj = Image::make($file);
-        $position_x = number_format($file_width * 2 / 100);
-        //$position_y = number_format($file_height * 2 / 100);
-        $mediaObj->insert($badgeScaled,'top-right', $position_x, $position_x);
-
-        return Image::make($mediaObj);
-    }
-
-    private function cloudUploadFile($file, $isWithBadge, $badge) {
+    private function cloudUploadFile($file, $isWithBadge, $badge, $height, $width) {
         ini_set('upload_max_filesize', '100M');
         ini_set('post_max_size', '100M');
         ini_set('max_input_time', 365);
         ini_set('max_execution_time', 365);
 
-        $mediaObj = $this->imageWatermarked($file, $badge);
-        //$saved = UploadedFile::createFromBase($file);
-        $fileExtention = explode('/', $mediaObj->mime)[1];
-        $filename = Str::random() . '.' . $fileExtention;
-        $mediaObj->save($filename);
-        $mediaObjPath = $mediaObj->dirname . "\\" . $mediaObj->basename;
-        //dd($saved, $mediaObj, $mediaObjPath);
-        //dd($mediaObjPath);
-
         // get media Type
         $mediaType = Helper::getMediaType($file);
         if($isWithBadge) {
             if($mediaType == 'image') {
-                $uploadedFileUrl = Cloudinary::upload($mediaObjPath,[
+                $uploadedFileUrl = Cloudinary::upload($file->getRealPath(),[
                     'folder' => 'images',
+                    'quality' => 'auto',
+                    'gravity' => 'north_east',
+                    'width' => 720,
+                    'overlay' => [
+                        'public_id' => $badge->public_id,
+                    ],
+                    'x' => 20,
+                    'y' => 20
                 ])->getSecurePath();
             } else {
                 ini_set('max_execution_time', 180); //3 minutes
-                $uploadedFileUrl = Cloudinary::uploadVideo($mediaObjPath, [
+                $uploadedFileUrl = Cloudinary::uploadVideo($file->getRealPath(), [
                     'folder' => 'video',
-                    'eager' => [['width' => 848,'height' => 480 ,'crop' => 'scale'],],
-                    'transformation' => [
-                        'quality' => 'auto',
-                        'overlay' => [
-                            'url' => '$injectBadge', 'flags' => 'layer_apply',
-                            'public_id' => $badge->public_id,
-                        ],
-                        'gravity' => 'north_east',
-                        'x' => 10, 'y' => 10,
+                    'quality' => 'auto',
+                    'gravity' => 'north_east',
+                    'width' => $width * 10 / 100,
+                    'crop' => 'scale',
+                    'overlay' => [
+                        'public_id' => $badge->public_id,
                     ],
-                ])->getSecurePath();
+                    'x' => 20,
+                    'y' => 20
+                ]);
             }
         }
         else {
@@ -170,6 +148,7 @@ class PostController extends Controller
                 ])->getSecurePath();
             }
         }
+        dd($uploadedFileUrl);
         return $uploadedFileUrl;
     }
 }
