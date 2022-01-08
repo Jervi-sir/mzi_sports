@@ -160,4 +160,30 @@ video {
   }
 
 
+  .load-more {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .load-more img {
+      width: 5rem;
+      height: 5rem;
+      display: none;
+  }
+
+  .load-more img.show {
+      display: block;
+  }
+
+  .load-more button {
+        background: black;
+        border-radius: 1rem;
+        color: white;
+        padding: 0.7rem 2rem;
+        border: none;
+        font-family: 'Poppins';
+        font-size: 1.5rem;
+    }
 

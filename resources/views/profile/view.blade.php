@@ -230,7 +230,7 @@
             this.auth = JSON.parse({!! json_encode($auth) !!});
             this.user = JSON.parse({!! json_encode($user) !!});
             this.following = JSON.parse({!! json_encode($doesFollow) !!});
-            console.log(this.posts);
+            console.log(this.results);
         }
     })
 </script>

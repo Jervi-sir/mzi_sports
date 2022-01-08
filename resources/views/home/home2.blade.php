@@ -29,7 +29,7 @@
         </h3>
     </div>
 
-    <div class="result-wide">
+    <div class="result-wide" >
         <div href="#" class="card" v-for="(result, index) in results">
             <div class="top">
                 <div class="owner">
@@ -67,6 +67,10 @@
             </div>
         </div>
     </div>
+    <div class="load-more">
+        <img v-bind:class="{ 'show' : loadIconShow }" src="../pics/loading-mini.svg" alt="">
+        <button v-if="canLoadMore" @click="morePosts">morePosts</button>
+    </div>
 
 
     <footer>
@@ -80,6 +84,8 @@
     var app = new Vue({
         el: '#body',
         data: {
+            loadIconShow: false,
+            canLoadMore: true,
             results: [],
             posts: [],
             tempArray: [],
@@ -88,6 +94,7 @@
             auth: [],
             selectedTag: '',
             token: '',
+            current: '',
 
         },
         methods: {
@@ -168,7 +175,41 @@
                     .then(response => response.json())
                     .then((data) => {})
                     .catch((error) => {console.log(error)});
-            }
+            },
+            morePosts: function() {
+                const url = '{!! route('morePosts') !!}';
+                let fetchData = {
+                    method: 'POST',
+                    body: JSON.stringify({ currentPage: this.current}),
+                    headers: new Headers({
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text-plain, */*",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": this.token
+                    })
+                }
+
+                this.loadIconShow = true;
+
+                fetch(url, fetchData)
+                    .then(response => response.json())
+                    .then((data) => {
+                        var dataResponse = JSON.parse(data);
+                        dataResponse.posts.forEach((item, index)=>{
+                            this.results.push(item)
+                        });
+                        console.log(this.results);
+                        this.current = dataResponse.visited;
+                        this.loadIconShow = false;
+                        this.loadIconShow = false;
+                    })
+                    .catch((error) => {
+                        this.canLoadMore = false;
+                        console.log(error)
+                        this.loadIconShow = false;
+                    });
+            },
+
         },
         created() {
             this.token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
@@ -181,7 +222,9 @@
 
             this.tags[0].active = true;
             this.selectedTag = this.tags[0].name;
-            console.log(data.posts);
+            this.current = data.visited;
+
+            console.log(data);
         }
     })
 </script>

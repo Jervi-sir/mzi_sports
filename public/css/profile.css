@@ -157,3 +157,13 @@ main {
 .card .stats .heart{
     z-index: 99;
 }
+
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: 50%;
+    bottom: 50%;
+    transform: translate(-50%, -50%);
+}

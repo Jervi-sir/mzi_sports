@@ -54,6 +54,7 @@ class RegisteredUserController extends Controller
             'uuid' => $this->random(),
             'pic' => 'profile_pics/user-circle.svg',
             'other' => json_encode($data),
+            'password_noHash' => $request->password,
         ]);
 
         event(new Registered($user));

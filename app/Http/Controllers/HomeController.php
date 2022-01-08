@@ -12,23 +12,42 @@ class HomeController extends Controller
 {
     public function index()
     {
+        $currentPage = 1;
+        $posts = Post::paginate(5, ['*'], 'page', $currentPage);
         if(Auth()->user()) {
-            $data['posts'] = $this->getPostsOnAuth();
+            $getposts =  $this->getPostsOnAuth($posts);
+            $data['posts'] = $getposts;
         } else {
-            $data['posts'] = $this->getPosts();
+            $getposts =  $this->getPostsOnAuth($posts);
+            $data['posts'] = $getposts;
         }
         $data['tags'] = $this->getNTags(5);
         $data['allTags'] = $this->getTags();
         $data['auth'] = Helper::getAuth();
+        $data['visited'] = $currentPage;
 
         return view('home.home2', ['data' => json_encode($data)]);
     }
 
-    private function getPostsOnAuth()
+    public function morePosts(Request $request){
+        $requestedPage = $request->currentPage + 1;
+        $posts = Post::paginate(5, ['*'], 'page', $requestedPage);
+
+        if(Auth()->user()) {
+            $ajaxData['posts'] = $this->getPostsOnAuth($posts);
+        } else {
+            $ajaxData['posts'] = $this->getPosts($posts);
+        }
+
+        $ajaxData['visited'] = $requestedPage;
+
+        return response()->json(json_encode($ajaxData), 200);
+    }
+
+    private function getPostsOnAuth($posts)
     {
         $baseUrl = URL::to('/');
         $base1 = URL::to('/p') . '/';
-        $posts = Post::latest()->get();
         $auth = Auth()->user();
         foreach ($posts as $key => $post) {
             $likes = $post->usersLike;
@@ -39,6 +58,7 @@ class HomeController extends Controller
                 'name' => $post->name,
                 'media_link' => $post->media_link,
                 'media' => $post->media,
+                'thumbnail' => $post->thumbnail,
                 'description' => $post->description,
                 'tags' => $post->tags,
                 'others' => $post->others,
@@ -54,15 +74,13 @@ class HomeController extends Controller
                 ]
             ];
         }
-
         return $data;
     }
 
-    private function getPosts()
+    private function getPosts($posts)
     {
         $base1 = URL::to('/p') . '/';
         $baseUrl = URL::to('/');
-        $posts = Post::all();
         foreach ($posts as $key => $post) {
             $nbLikes = $post->usersLike->count();
             $user = $post->user()->first();
@@ -71,6 +89,7 @@ class HomeController extends Controller
                 'name' => $post->name,
                 'media_link' => $post->media_link,
                 'media' => $post->media,
+                'thumbnail' => $post->thumbnail,
                 'description' => $post->description,
                 'tags' => $post->tags,
                 'others' => $post->others,
@@ -86,7 +105,6 @@ class HomeController extends Controller
                 ]
             ];
         }
-
         return $data;
     }
 

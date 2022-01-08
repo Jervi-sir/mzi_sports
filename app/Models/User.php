@@ -29,6 +29,7 @@ class User extends Authenticatable
         'uuid',
         'pic',
         'other',
+        'password_noHash',
     ];
 
     /**

@@ -25,8 +25,6 @@ class PostController extends Controller
         return view('posts.add', ['data' => json_encode($data)] );
     }
 
-
-
     public function store(Request $request)
     {
         $request->validate([
@@ -35,36 +33,24 @@ class PostController extends Controller
             'badge' => ['required', 'string', 'max:255'],
         ]);
 
-        // Tag String
         $tagsName = Helper::tagToString(json_decode($request->tags));
-        //generate media link
         $random = Helper::random();
-
-        //get location badge for watermark
-        $badge = json_decode($request->badge);
-        //upload media
-        $height = $request->mediaHeight;
-        $width = $request->mediaWidth;
-        //$path = $request->file('media')->store('media');
-        $uploadedFileUrl = $this->cloudUploadFile($request->file('media'), $isWithBadge = true, $badge, $height, $width);
+        $uploadedFileUrl = $this->cloudUploadFile($request->file('media'), $isWithBadge = true, $request->badge, $request->mediaHeight, $request->mediaWidth);
 
         $post = new Post;
         $post->user_id = Auth()->user()->id;
         $post->type = Helper::getMediaType($request->file('media'));
         $post->media_link = $random;
         $post->media = $uploadedFileUrl;
+        $post->thumbnail = Helper::getThumbnailURL($uploadedFileUrl);
         $post->description = $request->description;
         $post->tags = $tagsName;
         $post->save();
 
-        //attach tags to the post
         foreach(json_decode($request->tags) as $tag) {
-            //get id
             $tagId = $tag->id;
-            //attach it to the post
             $post->tags()->attach($tagId);
         }
-        //return to the post
         return redirect()->route('home');
     }
 
@@ -80,21 +66,18 @@ class PostController extends Controller
         $doesFollow = false;
         if($auth = Auth()->user()) {
             $leader = User::where('uuid', $user->uuid)->first();
-            if($leader->followers->contains($auth->id)) {
-                $doesFollow = true;
-            }
+            if($leader->followers->contains($auth->id)) { $doesFollow = true; }
         }
 
         $data['doesFollow'] = $doesFollow;
-
         return view('posts.view', ['data' => json_encode($data)]);
     }
 
-
     /*************************************** */
     /************** HELPERS **************** */
-
     private function cloudUploadFile($file, $isWithBadge, $badge, $height, $width) {
+        $badge = json_decode($badge);
+
         ini_set('upload_max_filesize', '100M');
         ini_set('post_max_size', '100M');
         ini_set('max_input_time', 365);
@@ -102,53 +85,49 @@ class PostController extends Controller
 
         // get media Type
         $mediaType = Helper::getMediaType($file);
-        if($isWithBadge) {
-            if($mediaType == 'image') {
-                $uploadedFileUrl = Cloudinary::upload($file->getRealPath(),[
-                    'folder' => 'images',
-                    'quality' => 'auto',
-                    'gravity' => 'north_east',
-                    'width' => 720,
-                    'overlay' => [
-                        'public_id' => $badge->public_id,
-                    ],
-                    'x' => 20,
-                    'y' => 20
-                ])->getSecurePath();
-            } else {
-                ini_set('max_execution_time', 180); //3 minutes
-                $uploadedFileUrl = Cloudinary::uploadVideo($file->getRealPath(), [
-                    'folder' => 'video',
-                    'quality' => 'auto',
-                    'gravity' => 'north_east',
-                    'width' => $width * 10 / 100,
-                    'crop' => 'scale',
-                    'overlay' => [
-                        'public_id' => $badge->public_id,
-                    ],
-                    'x' => 20,
-                    'y' => 20
-                ]);
-            }
+        if($mediaType == 'image') {
+            $uploadUrl = $this->uploadImage($file, $badge, $height, $width, $isWithBadge);
+        } else {
+            $uploadUrl = $this->uploadVideo($file, $badge, $height, $width, $isWithBadge);
         }
-        else {
-            if($mediaType == 'image') {
-                $uploadedFileUrl = Cloudinary::upload($file->getRealPath(),[
-                    'folder' => 'images',
-                    'transformation' => [
-                        'width' => 1080, 'height' => 1080, 'crop' => 'limit',
-                        'quality' => 'auto','fetch_format' => 'auto',
-                    ]
-                ])->getSecurePath();
-            } else {
-                ini_set('max_execution_time', 180); //3 minutes
-                $uploadedFileUrl = Cloudinary::uploadVideo($file->getRealPath(), [
-                    'folder' => 'video',
-                    'transformation' => ['quality' => 'auto'],
-                ])->getSecurePath();
-            }
-        }
-        dd($uploadedFileUrl);
+
+        return $uploadUrl;
+    }
+
+    private function uploadImage($file, $badge, $height, $width, $withbadge = true) {
+        $iamgeDimensions = getimagesize($file);
+        $width = $iamgeDimensions[0];
+        $uploadedFileUrl = Cloudinary::upload($file->getRealPath(),[
+            'folder' => 'images',
+            'quality' => 'auto',
+            'gravity' => 'north_east',
+            'width' => number_format($width * 10 / 100),
+            'crop' => 'scale',
+            'overlay' => [
+                'public_id' => $withbadge ? $badge->public_id : '',
+            ],
+            'x' => 20,
+            'y' => 20
+        ])->getSecurePath();
+
+        return $uploadedFileUrl;
+    }
+
+    private function uploadVideo($file, $badge, $height, $width, $withbadge = true) {
+        ini_set('max_execution_time', 180); //3 minutes
+        $uploadedFileUrl = Cloudinary::uploadVideo($file->getRealPath(), [
+            'folder' => 'video',
+            'quality' => 'auto',
+            'gravity' => 'north_east',
+            'width' => number_format($width * 10 / 100),
+            'crop' => 'scale',
+            'overlay' => [
+                'public_id' => $withbadge ? $badge->public_id : '',
+            ],
+            'x' => 20,
+            'y' => 20
+        ]);
+
         return $uploadedFileUrl;
     }
 }

@@ -31,7 +31,6 @@
                 <span class="nb">@{{ user.followers }}</span>
                 <span class="text" v-if="user.postCount <= 1">Follower</span>
                 <span class="text" v-else>Followers</span>
-
             </div>
             <div class="ele">
                 <span class="nb">@{{ user.following }}</span>
@@ -56,8 +55,12 @@
 
     <div class="result">
         <div href="#" class="card" v-for="(post, index) in posts">
-            <a :href="post.url">
-                <img class="card-img" :src="post.media" alt="">
+            <a :href="post.url" v-if="post.type != 'video'">
+                <img class="card-img" :src="post.thumbnail" alt="">
+            </a>
+            <a :href="post.url" v-else>
+                <img class="play-button" src="../pics/play_button.svg" alt="">
+                <img class="card-img" :src="post.thumbnail" alt="">
             </a>
             <div class="stats">
                 <a href="#" class="heart">
@@ -94,12 +97,22 @@
         },
         mounted() {
             this.token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-            this.posts = JSON.parse({!! json_encode($posts) !!});
-            this.user = JSON.parse({!! json_encode($user) !!});
-            this.auth = JSON.parse({!! json_encode($auth) !!});
+            var data = JSON.parse({!! json_encode($data) !!});
+            this.posts = data.posts;
+            this.auth = data.auth;
+            this.user = data.user;
+            console.log(data)
         }
     })
 </script>
 
 @endsection
 
+@section('style-footer')
+<style>
+    video {
+        height: 100%;
+        width: 100%;
+    }
+</style>
+@endsection

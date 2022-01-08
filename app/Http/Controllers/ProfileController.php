@@ -31,11 +31,9 @@ class ProfileController extends Controller
                 $doesFollow = true;
             }
         }
+        $data['doesFollow'] = $doesFollow;
 
-        return view('profile.view', ['user' => json_encode($data['user']),
-                                     'auth' => json_encode($data['auth']),
-                                      'posts' => json_encode($data['posts']),
-                                    'doesFollow' => json_encode($doesFollow)]);
+        return view('profile.view', ['data' => json_encode($data)]);
     }
 
     public function myProfile()
@@ -45,9 +43,7 @@ class ProfileController extends Controller
         $data['posts'] = Helper::getUserPosts($user->uuid);
         $data['auth'] = Helper::getAuth();
 
-        return view('myprofile.view', ['user' => json_encode($data['user']),
-                                        'auth' => json_encode($data['auth']),
-                                        'posts' => json_encode($data['posts'])]);
+        return view('myprofile.view', ['data' => json_encode($data)]);
     }
 
     public function edit()

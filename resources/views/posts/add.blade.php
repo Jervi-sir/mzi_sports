@@ -13,7 +13,6 @@
 @section('content')
 <header>
     <a href="" class="logo-menu">
-        <!--<img src="pics/logo-menu.svg" alt="">-->
     </a>
     <h2>Post</h2>
     <a href="javascript:history.go(-1)" class="back"><img src="../pics/arrow-back.svg" alt=""></a>
@@ -24,31 +23,41 @@
 <main>
     <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
+        <!-- preview video -->
         <div v-if="isVideo === true"  class="preview-image">
             <video id="video-preview" width="100%" height="100%" :src="media" controls/>
         </div>
+        <!-- preview image -->
         <div v-else class="preview-image">
             <img id="image-preview" :src="media" onerror="" alt="">
         </div>
+        <!-- file input -->
         <div class="field add-file" :class="errorDetected.media ? 'error-input' : ''">
             <label for="add-file">add image or video</label>
             <input name="media" @change="onFileChange" id="add-file" type="file" placeholder="add image" accept="video/mp4,video/x-m4v,video/*,image/*" required>
         </div>
-        <span class="error" v-if="errorDetected.media">
+        <span v-if="errorDetected.media" class="error" >
             @{{errorText.media}}
         </span>
+        <span v-if="overSize" class="error" >
+            Please select media less then 50mb
+        </span>
+
+        <!-- description input -->
         <div class="field" :class="errorDetected.description ? 'error-input' : ''">
             <textarea v-model="description" name="description" name="" id="" placeholder="Description" required></textarea>
         </div>
         <span class="error" v-if="errorDetected.description">
             @{{errorText.description}}
         </span>
+        <!-- Tag input -->
         <div class="field" :class="errorDetected.tags ? 'error-input' : ''">
-            <v-multiselect v-model="tagValues" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="id" :options="tagOptions" :multiple="true" :taggable="true"></v-multiselect>
+            <v-multiselect v-model="tagValues" tag-placeholder="select keyword" placeholder="Search for Keywords" label="name" track-by="id" :options="tagOptions" :multiple="true" :taggable="true"></v-multiselect>
         </div>
         <span class="error" v-if="errorDetected.tags">
             @{{errorText.tags}}
         </span>
+        <!-- Badges -->
         <div class="field location-badges" :class="errorDetected.badge ? 'error-input' : ''">
             <v-multiselect v-model="badgeValue" placeholder="Select your Location" label="id" track-by="id" :options="badgeOptions" :option-height="104" :custom-label="customLabel" :show-labels="false">
                 <template slot="option" slot-scope="props"><img class="option__image" :src="props.option.img" alt="Select your Location">
@@ -60,6 +69,7 @@
         <span class="error" v-if="errorDetected.badge">
             @{{errorText.badge}}
         </span>
+        <!-- some server inputs -->
         <input name="tags" v-model="tags" type="text" hidden required>
         <input name="badge" v-model="badge" type="text" hidden required>
         <input name="mediaHeight" v-model="mediaHeight" type="text" hidden required>
@@ -80,18 +90,11 @@
             "v-multiselect": window.VueMultiselect.default,
         },
         data: {
-            submitDisable: false,
-            progressBar: false,
-            auth: [],
-            token: '',
-            media: ' ',
-
-            mediaWidth: '',
-            mediaHeight: '',
-            mediaSize: '',
-
+            overSize: false, submitDisable: false, progressBar: false,
             isVideo: false,
-            description: '',
+            token: '', media: ' ', description: '',
+            mediaWidth: '', mediaHeight: '', mediaSize: '',
+            auth: [],
 
             tags: [],
             tagValues: [],
@@ -115,6 +118,7 @@
             }
         },
         methods: {
+            /*  Before Submitting  */
             verifySubmition: function() {
                 //check if media exists
                 if(this.media.replace(/\s+/g, '') == '') {
@@ -135,35 +139,48 @@
                     }, 100);
                 }
             },
+            /*  Show settings  */
             settings: function() {
                 var menu = document.getElementById('mobile-setting');
                 menu.classList.add('active');
             },
+            /*  Close settings  */
             closeSettings: function() {
                 var menu = document.getElementById('mobile-setting');
                 menu.classList.remove('active');
             },
+            /*  process with files  */
             onFileChange: function(e) {
-                const file = e.target.files[0];
-                this.mediaSize = this.niceBytes(file.size);
-                const type = file.type.includes('video');
+                const file = e.target.files[0];                 //get file
+                this.mediaSize = this.niceBytes(file.size);     //get size
+                if(file.size > 50000000) {  //verify if oversize
+                    setTimeout(() => {
+                        this.submitDisable = true;
+                        this.overSize = true;
+                    }, 100);
+                    return 0;
+                }
+                this.overSize = false;              //not oversize
+                this.submitDisable = false;
+                const isVdeo = file.type.includes('video');     //check if video
                 this.errorDetected.media = false;
-                this.media = URL.createObjectURL(file);
-                if(type) {
+                this.media = URL.createObjectURL(file);         //blob of input
+
+                if(isVdeo) {            //set video details, width/height/
                     this.isVideo = true;
                     setTimeout(() => {
                         var video = document.getElementById('video-preview');
                         this.mediaHeight = video.videoHeight;
                         this.mediaWidth = video.videoWidth;
-                    }, 50);
+                    }, 500);
 
-                } else {
+                } else {               //set image details, width/height
                     this.isVideo = false;
                     setTimeout(() => {
                         var image = document.getElementById('image-preview');
                         this.mediaHeight = image.height;
                         this.mediaWidth = image.width;
-                    }, 50);
+                    }, 500);
                 }
             },
             customLabel: function({ title, desc }) {
@@ -276,6 +293,12 @@
         background: transparent;
         font-size: 14px;
         align-items: center;
+    }
+
+    .multiselect__tags-wrap {
+        display: inline-flex;
+        align-content: center;
+        flex-wrap: wrap;
     }
 
 </style>

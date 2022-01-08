@@ -73,6 +73,7 @@ class Helper
             'type' => $post->type,
             'media_link' => $post->media_link,
             'media' => $post->media,
+            'thumbnail' => $post->thumbnail,
             'description' => $post->description,
             'tags' => $post->tags,
             'views' => '123',
@@ -129,7 +130,8 @@ class Helper
                 $data[$key] = [
                     'type' => $post->type,
                     'url' => $base1 . $post->media_link,             //use uuid
-                    'media' => $post->thumbnail,
+                    'thumbnail' => $post->thumbnail,
+                    'media' => $post->media,
                     'media_link' => $post->media_link,
                     'description' => $post->description,
                     'tags' => $post->tags,
@@ -143,7 +145,8 @@ class Helper
                 $data[$key] = [
                     'type' => $post->type,
                     'url' => $base1 . $post->media_link,             //use uuid
-                    'media' => $post->thumbnail,
+                    'thumbnail' => $post->thumbnail,
+                    'media' => $post->media,
                     'media_link' => $post->media_link,
                     'description' => $post->description,
                     'tags' => $post->tags,
@@ -184,5 +187,13 @@ class Helper
             array_push($tagsName, $tag->name);
         }
         return implode(", ", $tagsName);
+    }
+
+    static function getThumbnailURL($url) {
+        $u1 = explode('.', $url);
+        $lengthU1 = count($u1);
+        $newUrl = str_replace('jpg', $u1[$lengthU1 - 1], $url);
+
+        return $newUrl;
     }
 }
