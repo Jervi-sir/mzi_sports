@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\URL;
+use Intervention\Image\Facades\Image;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class PostController extends Controller
@@ -91,51 +92,59 @@ class PostController extends Controller
     /*************************************** */
     /************** HELPERS **************** */
 
+    private function imageWatermarked($file, $badge) {
+        //get file dimentions
+        $file_dimentions = getimagesize($file);
+        $file_width = $file_dimentions[0];
+        //$file_height = $file_dimentions[1];
+
+        //create Badge scaled
+        $badge_width = number_format($file_width * 10 / 100);
+        $badgeObj = Image::make($badge->img);
+        $badgeScaled = ($badgeObj->resize($badge_width, null, function ($constraint) {
+            $constraint->aspectRatio();
+        }));
+
+        //create and apply watermark for the image
+        $mediaObj = Image::make($file);
+        $position_x = number_format($file_width * 2 / 100);
+        //$position_y = number_format($file_height * 2 / 100);
+        $mediaObj->insert($badgeScaled,'top-right', $position_x, $position_x);
+
+        return Image::make($mediaObj);
+    }
+
     private function cloudUploadFile($file, $isWithBadge, $badge) {
         ini_set('upload_max_filesize', '100M');
         ini_set('post_max_size', '100M');
         ini_set('max_input_time', 365);
         ini_set('max_execution_time', 365);
 
-        $file_dimentions = getimagesize($file);
-        $file_width = $file_dimentions[0];
-        $file_height = $file_dimentions[1];
-        $scale = 'c_scale,w_' . number_format($file_width * 1 / 100) . '/';
+        $mediaObj = $this->imageWatermarked($file, $badge);
+        //$saved = UploadedFile::createFromBase($file);
+        $fileExtention = explode('/', $mediaObj->mime)[1];
+        $filename = Str::random() . '.' . $fileExtention;
+        $mediaObj->save($filename);
+        $mediaObjPath = $mediaObj->dirname . "\\" . $mediaObj->basename;
+        //dd($saved, $mediaObj, $mediaObjPath);
+        //dd($mediaObjPath);
 
-        $splitBadge = explode('upload/' ,$badge->img);
-        $injectScale = $splitBadge[0] . 'upload/' . $scale . $splitBadge[1];
-
-        $image = imagecreatefromjpeg($badge->img);
-        $img = imagescale( $image, 500, 400 );
-        dd(($img));
-
-        dd($injectScale);
         // get media Type
         $mediaType = Helper::getMediaType($file);
         if($isWithBadge) {
             if($mediaType == 'image') {
-                $uploadedFileUrl = Cloudinary::upload($file->getRealPath(),[
+                $uploadedFileUrl = Cloudinary::upload($mediaObjPath,[
                     'folder' => 'images',
-                    'eager' => [['width' => 848,'height' => 480 ,'crop' => 'scale'],],
-                    'transformation' => [
-                        'overlay' => [
-                            'url' => $injectScale, 'flags' => 'layer_apply',
-                            'public_id' => $badge->public_id,
-                        ],
-                        'gravity' => 'north_east',
-                        'x' => 10, 'y' => 10,
-                        'quality' => 'auto','fetch_format' => 'auto',
-                    ]
                 ])->getSecurePath();
             } else {
                 ini_set('max_execution_time', 180); //3 minutes
-                $uploadedFileUrl = Cloudinary::uploadVideo($file->getRealPath(), [
+                $uploadedFileUrl = Cloudinary::uploadVideo($mediaObjPath, [
                     'folder' => 'video',
                     'eager' => [['width' => 848,'height' => 480 ,'crop' => 'scale'],],
                     'transformation' => [
                         'quality' => 'auto',
                         'overlay' => [
-                            'url' => $injectScale, 'flags' => 'layer_apply',
+                            'url' => '$injectBadge', 'flags' => 'layer_apply',
                             'public_id' => $badge->public_id,
                         ],
                         'gravity' => 'north_east',
