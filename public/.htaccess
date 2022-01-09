@@ -3,7 +3,7 @@
         Options -MultiViews -Indexes
     </IfModule>
 
-    Limit/RequestBody 104857600
+    LimitRequestBody 104857600
     RewriteEngine On
 
 
