@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-<title>post</title>
+<title>Mzi posts</title>
 @endsection
 
 @section('style-header')

@@ -110,8 +110,6 @@ class PostController extends Controller
             'overlay' => [
                 'public_id' => $withbadge ? $badge->public_id : 'v1641691734/badges/transparent_bchpjc.png',
             ],
-            'x' => 20,
-            'y' => 20
         ])->getSecurePath();
 
         return $uploadedFileUrl;
@@ -128,8 +126,6 @@ class PostController extends Controller
             'overlay' => [
                 'public_id' => $withbadge ? $badge->public_id : 'v1641691734/badges/transparent_bchpjc.png',
             ],
-            'x' => 20,
-            'y' => 20
         ])->getSecurePath();
 
         return $uploadedFileUrl;
