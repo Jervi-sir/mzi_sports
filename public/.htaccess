@@ -3,9 +3,9 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+    Limit/RequestBody 104857600
     RewriteEngine On
 
-    LimitRequestBody 104857600
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
