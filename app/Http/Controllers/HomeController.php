@@ -18,7 +18,7 @@ class HomeController extends Controller
             $getposts =  $this->getPostsOnAuth($posts);
             $data['posts'] = $getposts;
         } else {
-            $getposts =  $this->getPostsOnAuth($posts);
+            $getposts =  $this->getPosts($posts);
             $data['posts'] = $getposts;
         }
         $data['tags'] = $this->getNTags(5);
