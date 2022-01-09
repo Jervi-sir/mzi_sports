@@ -214,6 +214,11 @@
             this.auth = data.auth;
             console.log(this.post);
             this.following = data.doesFollow;
+
+            var link = document.createElement('meta');
+            link.setAttribute('property', 'og:image');
+            link.content = this.post.thumbnail;
+            document.getElementsByTagName('head')[0].appendChild(link);
         }
     })
 </script>

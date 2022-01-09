@@ -215,13 +215,6 @@
                 this.mediaData = JSON.stringify(this.mediaData);
             }
         },
-        created() {
-            if(location.protocol === 'http://') {
-                var currentUrl = window.location.href;
-                currentUrl.replace("http://", "https://");
-                window.location.replace(currentUrl);
-            }
-        },
         mounted() {
             this.token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
             var data = JSON.parse({!! json_encode($data) !!});

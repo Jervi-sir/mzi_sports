@@ -69,7 +69,7 @@
     </div>
     <div class="load-more">
         <img v-bind:class="{ 'show' : loadIconShow }" src="../pics/loading-mini.svg" alt="">
-        <button v-if="canLoadMore" @click="morePosts">morePosts</button>
+        <button v-if="canLoadMore" @click="morePosts">More Posts</button>
     </div>
 
 
