@@ -61,8 +61,27 @@ class Helper
         ];
         }
 
-        return $data;
+        $withoutBadge = [
+            'id' => -1,
+            'img' => 'Error.src',
+            'public_id' => ' ',
+            'title' =>  'Unknown Location',
+            'ar' =>  ' ',
+            'fr' =>  ' ',
+        ];
+
+        $tempArray = collect($data)->sortBy('title')->toArray();
+        $finalData = [];
+
+        foreach ($tempArray as $key => $item) {
+            array_push($finalData, $item);
+        }
+
+        array_push($finalData, $withoutBadge);
+
+        return $finalData;
     }
+
 
     static function getPost($post) {
         $baseUrl = URL::to('/');
@@ -192,7 +211,7 @@ class Helper
     static function getThumbnailURL($url) {
         $u1 = explode('.', $url);
         $lengthU1 = count($u1);
-        $newUrl = str_replace('jpg', $u1[$lengthU1 - 1], $url);
+        $newUrl = str_replace($u1[$lengthU1 - 1], 'jpg', $url);
 
         return $newUrl;
     }

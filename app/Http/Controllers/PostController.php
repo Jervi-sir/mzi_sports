@@ -35,7 +35,11 @@ class PostController extends Controller
 
         $tagsName = Helper::tagToString(json_decode($request->tags));
         $random = Helper::random();
-        $uploadedFileUrl = $this->cloudUploadFile($request->file('media'), $isWithBadge = true, $request->badge, $request->mediaHeight, $request->mediaWidth);
+        $isWithBadge = true;
+        if(json_decode($request->badge)->id < 0) {
+            $isWithBadge = false;
+        }
+        $uploadedFileUrl = $this->cloudUploadFile($request->file('media'), $isWithBadge, $request->badge, $request->mediaHeight, $request->mediaWidth);
 
         $post = new Post;
         $post->user_id = Auth()->user()->id;
@@ -104,7 +108,7 @@ class PostController extends Controller
             'width' => number_format($width * 10 / 100),
             'crop' => 'scale',
             'overlay' => [
-                'public_id' => $withbadge ? $badge->public_id : '',
+                'public_id' => $withbadge ? $badge->public_id : 'v1641691734/badges/transparent_bchpjc.png',
             ],
             'x' => 20,
             'y' => 20
@@ -122,11 +126,11 @@ class PostController extends Controller
             'width' => number_format($width * 10 / 100),
             'crop' => 'scale',
             'overlay' => [
-                'public_id' => $withbadge ? $badge->public_id : '',
+                'public_id' => $withbadge ? $badge->public_id : 'v1641691734/badges/transparent_bchpjc.png',
             ],
             'x' => 20,
             'y' => 20
-        ]);
+        ])->getSecurePath();
 
         return $uploadedFileUrl;
     }

@@ -68,15 +68,16 @@
 
     <div class="result">
         <div href="#" class="card" v-for="(post, index) in results">
-            <a :href="post.url">
-                <img class="card-img" :src="post.media" alt="">
+            <a :href="post.url" v-if="post.type != 'video'">
+                <img class="card-img" :src="post.thumbnail" alt="">
+            </a>
+            <a :href="post.url" v-else>
+                <img class="play-button" src="../pics/play_button.svg" alt="">
+                <img class="card-img" :src="post.thumbnail" alt="">
             </a>
             <div class="stats">
-                <a v-if="!post.liked" :id="'like_post' + index"href="#" class="heart" @click.prevent="like(post.media_link, index)">
+                <a href="#" class="heart">
                     <img src="../pics/heart.svg" alt="">
-                </a>
-                <a v-else href="#" class="heart" @click.prevent="unlike(post.media_link, index)">
-                    <img src="../pics/heart_full.svg" alt="">
                 </a>
             </div>
         </div>
@@ -226,11 +227,12 @@
         },
         mounted() {
             this.token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-            this.results = JSON.parse({!! json_encode($posts) !!});
-            this.auth = JSON.parse({!! json_encode($auth) !!});
-            this.user = JSON.parse({!! json_encode($user) !!});
-            this.following = JSON.parse({!! json_encode($doesFollow) !!});
-            console.log(this.results);
+            var data = JSON.parse({!! json_encode($data) !!});
+            this.results = data.posts;
+            this.auth = data.auth;
+            this.user = data.user;
+            this.following = data.doesFollow;
+
         }
     })
 </script>

@@ -93,6 +93,62 @@
             closeSettings: function() {
                 var menu = document.getElementById('mobile-setting');
                 menu.classList.remove('active');
+            },
+            like: function(media_link, index) {
+                const url = '{!! route('like') !!}';
+
+                let fetchData = {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        media_link: media_link,
+                    }),
+                    headers: new Headers({
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text-plain, */*",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": this.token
+                    })
+                }
+                fetch(url, fetchData)
+                    .then(response => response.json())
+                    .then((data) => {
+                        if(data['response'] == true) {
+                            //this.following = true;
+                            this.results[index].liked = true;
+                            var ele = 'like_post' + index;
+                            document.getElementById(ele).classList.add('liked');
+                        }
+                    })
+                    .catch((error) => {console.log(error)});
+            },
+            unlike: function(media_link, index) {
+                const url = '{!! route('unlike') !!}';
+
+                let fetchData = {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        media_link: media_link,
+                    }),
+                    headers: new Headers({
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text-plain, */*",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": this.token
+                    })
+                }
+                fetch(url, fetchData)
+                    .then(response => response.json())
+                    .then((data) => {
+                        if(data['response'] == true) {
+                            //this.following = false;
+                            var ele = 'like_post' + index;
+                            setTimeout(function() {
+                                document.getElementById(ele).classList.remove('liked');
+                            }, 10);
+                            this.results[index].liked = false;
+                        }
+                    })
+                    .catch((error) => {console.log(error)});
             }
         },
         mounted() {
@@ -101,7 +157,6 @@
             this.posts = data.posts;
             this.auth = data.auth;
             this.user = data.user;
-            console.log(data)
         }
     })
 </script>

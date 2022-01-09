@@ -15,6 +15,7 @@ class LikeController extends Controller
         $auth = Auth()->user();
 
         $post = Post::where('media_link', $media_link)->first();
+        $post->likes = $post->likes + 1;
 
         //$post->usersLike()->attach($auth->id);
         if($post->usersLike->contains($auth->id)) {
@@ -38,7 +39,7 @@ class LikeController extends Controller
         $auth = Auth()->user();
 
         $post = Post::where('media_link', $media_link)->first();
-
+        $post->likes = $post->likes - 1;
         //$post->usersLike()->attach($auth->id);
 
 

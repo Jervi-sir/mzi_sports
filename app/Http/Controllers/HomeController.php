@@ -13,7 +13,7 @@ class HomeController extends Controller
     public function index()
     {
         $currentPage = 1;
-        $posts = Post::paginate(5, ['*'], 'page', $currentPage);
+        $posts = Post::latest()->paginate(5, ['*'], 'page', $currentPage);
         if(Auth()->user()) {
             $getposts =  $this->getPostsOnAuth($posts);
             $data['posts'] = $getposts;
@@ -31,7 +31,7 @@ class HomeController extends Controller
 
     public function morePosts(Request $request){
         $requestedPage = $request->currentPage + 1;
-        $posts = Post::paginate(5, ['*'], 'page', $requestedPage);
+        $posts = Post::latest()->paginate(5, ['*'], 'page', $requestedPage);
 
         if(Auth()->user()) {
             $ajaxData['posts'] = $this->getPostsOnAuth($posts);
@@ -125,12 +125,15 @@ class HomeController extends Controller
     private function getNTags($amount = 10)
     {
         $tags = Tag::latest()->take($amount)->get();
+
         foreach ($tags as $key => $tag) {
-            $data[$key] = [
-                'id' => $tag->id,
-                'name' => $tag->name,
-                'active' => false,
-            ];
+            if($tag->posts()->count() > 0) {
+                $data[$key] = [
+                    'id' => $tag->id,
+                    'name' => $tag->name,
+                    'active' => false,
+                ];
+            }
         }
 
         return $data;
