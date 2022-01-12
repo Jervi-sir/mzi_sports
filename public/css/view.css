@@ -139,7 +139,11 @@ header a.back {
 
 video {
     height: 100%;
-    width: 100%;
+    /*width: 100%;*/
+}
+main {
+    margin: auto;
+    margin-bottom: 10rem;
 }
 
 .heart {
