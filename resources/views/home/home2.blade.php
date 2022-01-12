@@ -15,6 +15,7 @@
     <img src="../pics/logo.svg" alt="">
 </header>
 <main >
+    <!--
     <div class="tab-select">
         <span v-for="(tag, index) in tags">
             <a href="#" @click="filterByTag(tag, index)" :class="{ active: tag.active }">@{{ tag.name }}</a>
@@ -23,12 +24,17 @@
             <a href="#" @click.previent="moreTags"> see more ... </a>
         </span>
     </div>
+-->
     <div class="tab-title">
         <h3>
-            @{{ selectedTag }}
+           Actuality
         </h3>
     </div>
-
+    <div id="toastr-login" class="please-login hide">
+        <span>
+            Please Login
+        </span>
+    </div>
     <div class="result-wide" >
         <div href="#" class="card" v-for="(result, index) in results">
             <div class="top">
@@ -50,14 +56,24 @@
                 <video :src="result.media" controls/>
             </div>
             <div class="stats">
+                @auth
                 <a :id="'like_post' + index" v-if="!result.liked" href="#" class="heart" @click.prevent="like(result.media_link, index)">
-                    <img src="../pics/heart_empty_black.svg" alt="">
+                    <img src="../pics/heart_empty.svg" alt="">
                     <span>@{{ result.nbLikes }}</span>
                 </a>
                 <a v-else href="#" class="heart" @click.prevent="unlike(result.media_link, index)">
-                    <img src="../pics/heart_full_black.svg" alt="">
+                    <img src="../pics/heart_full.svg" alt="">
                     <span>@{{ result.nbLikes }}</span>
                 </a>
+                @endauth
+
+                @guest
+                <a :id="'like_post' + index" href="#" class="heart" @click.prevent="toastr">
+                    <img src="../pics/heart_empty.svg" alt="">
+                    <span>@{{ result.nbLikes }}</span>
+                </a>
+                @endguest
+
                 <div class="ago">
                     @{{result.created_at}}
                 </div>
@@ -80,6 +96,7 @@
 @endsection
 
 @section('vuejs')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     var app = new Vue({
         el: '#body',
@@ -133,6 +150,17 @@
                 }
                 this.tags[index].active = true;
 
+            },
+            toastr: function() {
+                var toastr = document.getElementById("toastr-login");
+                toastr.classList.remove('hide');
+                toastr.classList.add('show');
+                setTimeout(() => {
+                    toastr.classList.remove('show')
+                }, 100);
+                setTimeout(() => {
+                    toastr.classList.add('hide')
+                }, 5000);
             },
             like: function(media_link, index) {
                 var ele = 'like_post' + index;

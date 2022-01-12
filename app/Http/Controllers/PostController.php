@@ -77,6 +77,30 @@ class PostController extends Controller
         return view('posts.view', ['data' => json_encode($data)]);
     }
 
+    public function view2($uuid)
+    {
+        $post = Post::where('media_link', $uuid)->first();
+        $user = $post->user()->first();
+
+        $data['post'] = Helper::getPost($post);
+        $data['user'] = Helper::getUser($user);
+        $data['auth'] = Helper::getAuth();
+        $thumbnail = ($data['post']['thumbnail']);
+        $description = ($data['post']['description']);
+
+
+        $doesFollow = false;
+        if($auth = Auth()->user()) {
+            $leader = User::where('uuid', $user->uuid)->first();
+            if($leader->followers->contains($auth->id)) { $doesFollow = true; }
+        }
+
+        $data['doesFollow'] = $doesFollow;
+        return view('posts.view', ['data' => json_encode($data),
+                                    'thumbnail' => $thumbnail,
+                                    'description' => $description]);
+    }
+
     /*************************************** */
     /************** HELPERS **************** */
     private function cloudUploadFile($file, $isWithBadge, $badge, $height, $width) {

@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/morePosts', [HomeController::class, 'morePosts'])->name('morePosts');
 
-Route::get('/p/{uuid}', [PostController::class, 'view'])->name('post.view');
+Route::get('/p/{uuid}', [PostController::class, 'view2'])->name('post.view');
 
 Route::get('/u/{uuid}', [ProfileController::class, 'view'])->name('profile.view');
 

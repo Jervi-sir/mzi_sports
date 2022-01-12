@@ -2,11 +2,8 @@
 
 @section('title')
 <title>Mzi posts</title>
+<meta property="og:title"  content="Mzi sports, Actuality & News" />
 <meta property="og:url"                content="http://www.nytimes.com/2015/02/19/arts/international/when-great-minds-dont-think-alike.html" />
-<meta property="og:type"               content="article" />
-<meta property="og:title"              content="Mzi sports, Actuality and News" />
-<meta property="og:image"              content="{{$thumbnail}}" />
-<meta property="og:description"        content="{{ $description }}" />
 
 @endsection
 
