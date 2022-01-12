@@ -75,7 +75,7 @@
         <input name="mediaHeight" v-model="mediaHeight" type="text" hidden required>
         <input name="mediaWidth" v-model="mediaWidth" type="text" hidden required>
         <input name="mediaSize" v-model="mediaSize" type="text" hidden required>
-        <button type="submit" @click="verifySubmition" :disabled='submitDisable'>Publish image</button>
+        <button type="submit" @click="verifySubmition" :disabled='submitDisable'>Publish</button>
     </form>
 </main>
 @endsection
