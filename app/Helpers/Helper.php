@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\Badges;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
 
@@ -83,10 +84,11 @@ class Helper
     }
 
 
-    static function getPost($post) {
+    static function getPostAuth($post) {
         $baseUrl = URL::to('/');
         $nbLikes = $post->usersLike->count();
         $user = $post->user()->first();
+        $likes = $post->usersLike;
         $data = [
             'id' => $post->id,
             'type' => $post->type,
@@ -96,8 +98,30 @@ class Helper
             'description' => $post->description,
             'tags' => $post->tags,
             'views' => '123',
-            'liked' => true,
-            'nbLikes' => $nbLikes < 2 ? $nbLikes . ' Like' : $nbLikes . ' Likes',
+            'liked' => $likes->contains(Auth()->user()->id) ? true : false,
+            'nbLikes' => $nbLikes,
+            'created_at' => $post->created_at->diffForHumans(),
+        ];
+        return $data;
+    }
+
+    static function getPost($post) {
+        $baseUrl = URL::to('/');
+        $nbLikes = $post->usersLike->count();
+        $user = $post->user()->first();
+        $likes = $post->usersLike;
+        $data = [
+            'id' => $post->id,
+            'type' => $post->type,
+            'media_link' => $post->media_link,
+            'media' => $post->media,
+            'thumbnail' => $post->thumbnail,
+            'description' => $post->description,
+            'tags' => $post->tags,
+            'views' => '123',
+            'liked' => false,
+            'nbLikes' => $nbLikes,
+            'created_at' => $post->created_at->diffForHumans(),
         ];
         return $data;
     }

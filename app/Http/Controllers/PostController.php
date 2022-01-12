@@ -82,12 +82,16 @@ class PostController extends Controller
         $post = Post::where('media_link', $uuid)->first();
         $user = $post->user()->first();
 
-        $data['post'] = Helper::getPost($post);
+        if(Auth()->user()) {
+            $data['post'] = Helper::getPostAuth($post);
+        } else {
+            $data['post'] = Helper::getPost($post);
+
+        }
         $data['user'] = Helper::getUser($user);
         $data['auth'] = Helper::getAuth();
         $thumbnail = ($data['post']['thumbnail']);
         $description = ($data['post']['description']);
-
 
         $doesFollow = false;
         if($auth = Auth()->user()) {

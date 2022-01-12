@@ -7,7 +7,7 @@ header {
 
 }
 header img {
-    filter: invert(1);
+    /*filter: invert(1);*/
 }
 
 /*---- Tabs----*/

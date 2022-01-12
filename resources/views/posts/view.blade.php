@@ -62,13 +62,13 @@
             </div>
         </div>
         <div class="reactions">
-            <a id='like_post' v-if="!post.liked" href="#" class="heart" @click.prevent="like(post.media_link)">
+            <a id='like_post' v-show="!post.liked" href="#" class="heart" @click.prevent="like(post.media_link)">
                 <img src="../pics/heart_empty.svg" alt="">
-                <span>@{{ post.nbLikes }}</span>
+                <span>@{{ post.nbLikes }} Likes</span>
             </a>
-            <a v-else href="#" class="heart" @click.prevent="unlike(post.media_link)">
+            <a v-show="post.liked" href="#" class="heart" @click.prevent="unlike(post.media_link)">
                 <img src="../pics/heart_full.svg" alt="">
-                <span>@{{ post.nbLikes }}</span>
+                <span>@{{ post.nbLikes }} Likes</span>
             </a>
             <div class="views">
             </div>
@@ -151,40 +151,35 @@
                     .catch((error) => {console.log(error)});
             },
             like: function(media_link) {
+                var ele = 'like_post';
+                document.getElementById(ele).classList.add('liked');
+                this.post.nbLikes++;
+                this.post.liked = true;
                 const url = '{!! route('like') !!}';
-
                 let fetchData = {
                     method: 'POST',
-                    body: JSON.stringify({
-                        media_link: media_link,
-                    }),
+                    body: JSON.stringify({media_link: media_link}),
                     headers: new Headers({
                         "Content-Type": "application/json",
                         "Accept": "application/json, text-plain, */*",
                         "X-Requested-With": "XMLHttpRequest",
                         "X-CSRF-TOKEN": this.token
                     })
-                }
+                };
                 fetch(url, fetchData)
                     .then(response => response.json())
-                    .then((data) => {
-                        if(data['response'] == true) {
-                            //this.following = true;
-                            this.post.liked = true;
-                            var ele = 'like_post';
-                            document.getElementById(ele).classList.add('liked');
-                        }
-                    })
+                    .then((data) => {})
                     .catch((error) => {console.log(error)});
             },
             unlike: function(media_link) {
                 const url = '{!! route('unlike') !!}';
-
+                var ele = 'like_post';
+                setTimeout(function() { document.getElementById(ele).classList.remove('liked')}, 10);
+                this.post.nbLikes--;
+                this.post.liked = false;
                 let fetchData = {
                     method: 'POST',
-                    body: JSON.stringify({
-                        media_link: media_link,
-                    }),
+                    body: JSON.stringify({ media_link: media_link}),
                     headers: new Headers({
                         "Content-Type": "application/json",
                         "Accept": "application/json, text-plain, */*",
@@ -194,18 +189,9 @@
                 }
                 fetch(url, fetchData)
                     .then(response => response.json())
-                    .then((data) => {
-                        if(data['response'] == true) {
-                            //this.following = false;
-                            var ele = 'like_post';
-                            setTimeout(function() {
-                                document.getElementById(ele).classList.remove('liked');
-                            }, 10);
-                            this.post.liked = false;
-                        }
-                    })
+                    .then((data) => {})
                     .catch((error) => {console.log(error)});
-            }
+            },
         },
         mounted() {
             this.token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");

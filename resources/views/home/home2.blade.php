@@ -30,11 +30,13 @@
            Actuality
         </h3>
     </div>
+    @guest
     <div id="toastr-login" class="please-login hide">
         <span>
             Please Login
         </span>
     </div>
+    @endguest
     <div class="result-wide" >
         <div href="#" class="card" v-for="(result, index) in results">
             <div class="top">

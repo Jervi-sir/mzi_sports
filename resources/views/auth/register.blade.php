@@ -19,7 +19,7 @@
 <div id="register" class="form">
     <div class="content">
         <div class="logo">
-            <img src="pics/logo-login.svg" alt="">
+            <img src="pics/logo-logs.svg" alt="">
         </div>
         <form method="POST" action="{{ route('register') }}">
             @csrf

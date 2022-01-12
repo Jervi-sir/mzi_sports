@@ -95,7 +95,7 @@ class HomeController extends Controller
                 'others' => $post->others,
                 'type' => $post->type,
                 'sharefb' => 'https://www.facebook.com/sharer/sharer.php?u=' . $base1 . $post->media_link,
-                'liked' => true,
+                'liked' => false,
                 'nbLikes' => $nbLikes,
                 'created_at' => $post->created_at->diffForHumans(),
                 'user' => [

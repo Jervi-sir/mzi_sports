@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/menu.css">
     <link rel="stylesheet" href="../css/settings.css">
+    <link rel="icon" href="pics/favicon.svg">
 
     @yield('style-header')
     @yield('script-header')
