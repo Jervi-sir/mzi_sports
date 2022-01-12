@@ -154,7 +154,7 @@
             onFileChange: function(e) {
                 const file = e.target.files[0];                 //get file
                 this.mediaSize = this.niceBytes(file.size);     //get size
-                if(file.size > 8000000) {  //verify if oversize
+                if(file.size > 50000000) {  //verify if oversize
                     setTimeout(() => {
                         this.submitDisable = true;
                         this.overSize = true;
