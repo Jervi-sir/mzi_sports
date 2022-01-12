@@ -34,7 +34,7 @@
         <!-- file input -->
         <div class="field add-file" :class="errorDetected.media ? 'error-input' : ''">
             <label for="add-file">add image or video</label>
-            <input  name="media" @change="onFileChange" id="add-file" type="file" placeholder="add image" accept="video/mp4,video/x-m4v,video/*,image/*" required>
+            <input name="media" @change="onFileChange" id="add-file" type="file" placeholder="add image" accept="video/mp4,video/x-m4v,video/*,image/*" required>
         </div>
         <span v-if="errorDetected.media" class="error" >
             @{{errorText.media}}
@@ -75,9 +75,9 @@
         <input name="mediaHeight" v-model="mediaHeight" type="text" hidden required>
         <input name="mediaWidth" v-model="mediaWidth" type="text" hidden required>
         <input name="mediaSize" v-model="mediaSize" type="text" hidden required>
-        <button v-if="!isVideo" type="submit" @click="verifySubmition" :disabled='submitDisable'>Publish @{{ type }}</button>
+        <button type="submit" @click="verifySubmition" :disabled='submitDisable'>Publish image</button>
     </form>
-    <button v-if="isVideo" @click="verifySubmition" :disabled='submitDisable'>Publish @{{ type }}</button>
+        <button type="submit" @click="verifySubmition" :disabled='submitDisable'>Publish video</button>
 </main>
 @endsection
 
@@ -97,7 +97,6 @@
             token: '', media: ' ', description: '',
             mediaWidth: '', mediaHeight: '', mediaSize: '',
             auth: [],
-            type: '', fileContents: null,
 
             tags: [],
             tagValues: [],
@@ -199,31 +198,6 @@
                     n = n/1024;
                 }
                 return(n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
-            },
-            uploadVideo: function() {
-                const preset = 'videos';
-                const cloudName = 'mzi-sports';
-                let reader = new FileReader();
-                reader.addEventListener(
-                    "load",
-                    function() {
-                        this.fileContents = reader.result;
-                        var formData = new FormData();
-                        formData.append("upload_preset", this.preset);
-                        formData.append("file", this.fileContents);
-                        let cloudinaryUploadURL = `https://api.cloudinary.com/v1_1/${this.cloudName}/upload`;
-                        let requestObj = {
-                            url: cloudinaryUploadURL,
-                            method: "POST",
-                            data: formData,
-                        }
-                        fetch(cloudinaryUploadURL, requestObj)
-                            .then(response => response.json())
-                            .then((data) => {})
-                            .catch((error) => {console.log(error)});
-
-                    }
-                )
             }
 
         },
