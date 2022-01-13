@@ -26,6 +26,9 @@ header a.back {
 
 .post .top {
     margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .post .top .owner{
     display: flex;
@@ -111,10 +114,11 @@ header a.back {
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 2rem;
+    position: relative;
 }
 
 .reactions img {
-    width: 2.5rem;
+    height: 2.5rem;
 }
 
 .reactions .views {
@@ -156,3 +160,111 @@ main {
 .heart span {
     color: black;
 }
+
+
+/*----------------------
+        options
+-----------------------*/
+.showLeft {
+    border: 1px solid white !important;
+    text-shadow: white !important;
+    color: black !important;
+    padding: 10px;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: fixed;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 20;
+    right: 0;
+  }
+
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown a:hover {
+    background-color: #f1f1f1;
+  }
+
+  .show {
+    display: block;
+  }
+
+
+  /*-----------------
+        Modal
+-------------------*/
+
+.delete-modal {
+    background-color: white;
+    border-radius: 1.5rem;
+    position: fixed;
+    z-index: 99;
+    top: 30%;
+    left: 10%;
+    overflow: hidden;
+    width: 80vw;
+    display: none;
+
+}
+
+.delete-modal.show {
+    display: unset;
+}
+
+.delete-modal .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: #f9f9f9;
+}
+
+.delete-modal .top span {
+    display: flex;
+    align-items: center;
+}
+
+.delete-modal .top button {
+    background-color: transparent;
+    border: none;
+    color: green;
+    font-size: 2rem;
+}
+
+.delete-modal h3 {
+    color: red;
+    padding-left: 2rem;
+}
+
+.delete-modal .actions button {
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+}
+
+.delete-modal .yes {
+    background-color: red;
+}
+
+.delete-modal .no {
+    background-color: green;
+}
+
+.delete-modal .actions {
+    display: flex;
+    gap: 2rem;
+    justify-content: flex-end;
+    padding-right: 2rem;
+    padding-bottom: 2rem;
+}
+

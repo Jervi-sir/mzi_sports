@@ -7,6 +7,9 @@
 @section('style-header')
 <link rel="stylesheet" href="../css/home.css">
 <link rel="stylesheet" href="../css/tagList.css">
+
+<link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
+
 @endsection
 
 @section('content')
@@ -89,7 +92,6 @@
         <img v-bind:class="{ 'show' : loadIconShow }" src="../pics/loading-mini.svg" alt="">
         <button v-if="canLoadMore" @click="morePosts">More Posts</button>
     </div>
-
 
     <footer>
         <h6>copyright MZI sports</h6>

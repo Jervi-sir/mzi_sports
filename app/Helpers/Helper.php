@@ -164,8 +164,9 @@ class Helper
         $baseUrl = URL::to('/');
         $base1 = URL::to('/p') . '/';
         $user = User::where('uuid', $uuid)->first();
-        $posts = $user->posts;
+        $posts = $user->posts->sortDesc();
         $auth = Auth()->user();
+
         $data = [];
         if($auth) {
             foreach ($posts as $key => $post) {
@@ -174,6 +175,7 @@ class Helper
                     'type' => $post->type,
                     'url' => $base1 . $post->media_link,             //use uuid
                     'thumbnail' => $post->thumbnail,
+                    'square_pic' => Helper::getSquarePic($post->thumbnail),
                     'media' => $post->media,
                     'media_link' => $post->media_link,
                     'description' => $post->description,
@@ -189,6 +191,7 @@ class Helper
                     'type' => $post->type,
                     'url' => $base1 . $post->media_link,             //use uuid
                     'thumbnail' => $post->thumbnail,
+                    'square_pic' => Helper::getSquarePic($post->thumbnail),
                     'media' => $post->media,
                     'media_link' => $post->media_link,
                     'description' => $post->description,
@@ -198,7 +201,6 @@ class Helper
                 ];
             }
         }
-
         return $data;
     }
 
@@ -238,5 +240,11 @@ class Helper
         $newUrl = str_replace($u1[$lengthU1 - 1], 'jpg', $url);
 
         return $newUrl;
+    }
+
+    static function getSquarePic($url) {
+        $url_array = explode('upload', $url);
+        $squre_pic = $url_array[0] . 'upload/' . 'c_fill,g_auto,h_200,w_200' . $url_array[1];
+        return ($squre_pic);
     }
 }

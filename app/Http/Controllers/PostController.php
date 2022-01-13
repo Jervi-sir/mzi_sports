@@ -39,14 +39,17 @@ class PostController extends Controller
         if(json_decode($request->badge)->id < 0) {
             $isWithBadge = false;
         }
-        $uploadedFileUrl = $this->cloudUploadFile($request->file('media'), $isWithBadge, $request->badge, $request->mediaHeight, $request->mediaWidth);
+        $uploadedFile = $this->cloudUploadFile($request->file('media'), false, $request->badge, $request->mediaHeight, $request->mediaWidth);
 
         $post = new Post;
         $post->user_id = Auth()->user()->id;
         $post->type = Helper::getMediaType($request->file('media'));
         $post->media_link = $random;
-        $post->media = $uploadedFileUrl;
-        $post->thumbnail = Helper::getThumbnailURL($uploadedFileUrl);
+
+        $post->media = $uploadedFile['secure_path'];
+        $post->public_id = $uploadedFile['public_id'];
+
+        $post->thumbnail = Helper::getThumbnailURL($uploadedFile['secure_path']);
         $post->description = $request->description;
         $post->tags = $tagsName;
         $post->save();
@@ -102,7 +105,23 @@ class PostController extends Controller
         $data['doesFollow'] = $doesFollow;
         return view('posts.view', ['data' => json_encode($data),
                                     'thumbnail' => $thumbnail,
-                                    'description' => $description]);
+                                    'description' => $description,
+                                    'uuid' => $post->id]);
+    }
+
+    public function delete($uuid) {
+        //select post
+        $post = Post::find($uuid);
+        //delete media from cloud
+
+        //detach tags from it
+        $public_id = $post->public_id;
+        $uploadedFileUrl = Cloudinary::destroy($public_id);
+
+        $post->delete();
+
+        return redirect()->route('profile.mine');
+
     }
 
     /*************************************** */
@@ -138,9 +157,11 @@ class PostController extends Controller
             'overlay' => [
                 'public_id' => $withbadge ? $badge->public_id : 'v1641691734/badges/transparent_bchpjc.png',
             ],
-        ])->getSecurePath();
+        ]);
+        $data['secure_path'] = $uploadedFileUrl->getSecurePath();
+        $data['public_id'] = $uploadedFileUrl->getPublicId();
 
-        return $uploadedFileUrl;
+        return $data;
     }
 
     private function uploadVideo($file, $badge, $height, $width, $withbadge = true) {
@@ -154,9 +175,12 @@ class PostController extends Controller
             'overlay' => [
                 'public_id' => $withbadge ? $badge->public_id : 'v1641691734/badges/transparent_bchpjc.png',
             ],
-        ])->getSecurePath();
+        ]);
 
-        return $uploadedFileUrl;
+        $data['secure_path'] = $uploadedFileUrl->getSecurePath();
+        $data['public_id'] = $uploadedFileUrl->getPublicId();
+
+        return $data;
     }
 }
 

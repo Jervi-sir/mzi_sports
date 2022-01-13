@@ -54,6 +54,11 @@
         @guest
         <a href="{{ route('login') }}">Follow</a>
         @endguest
+        @if ($isMyProfile)
+        <div class="actions">
+            <a href="{{ route('profile.edit') }}" type="submit">Edit</a>
+        </div>
+        @else
         @auth
         <form v-if="!following" id="follow-form" action="{{ route('follow') }}">
             @csrf
@@ -64,6 +69,7 @@
             <button type="button" @click="unfollow">Following</button>
         </form>
         @endauth
+        @endif
     </div>
 
     <div class="result">

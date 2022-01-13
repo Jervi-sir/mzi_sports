@@ -1,12 +1,16 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\FollowerController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\FollowerController;
+use App\Http\Controllers\Blade\ProfileController as ProfileBlade;
+use App\Http\Controllers\ProfileController as ProfileController;
+
+use App\Http\Controllers\Blade\PostController as PostBlade;
+use App\Http\Controllers\PostController as PostController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,15 +27,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/morePosts', [HomeController::class, 'morePosts'])->name('morePosts');
 
-Route::get('/p/{uuid}', [PostController::class, 'view2'])->name('post.view');
+Route::get('/p/{uuid}', [PostBlade::class, 'view2'])->name('post.view');
 
-Route::get('/u/{uuid}', [ProfileController::class, 'view'])->name('profile.view');
+Route::get('/u/{uuid}', [ProfileBlade::class, 'view'])->name('profile.view');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/post&add', [PostController::class, 'add'])->name('post.add');
     Route::post('/post&add', [PostController::class, 'store'])->name('post.store');
+    Route::post('/deletepost/{uuid}', [PostController::class, 'delete'])->name('delete.post');
 
-    Route::get('/profile&mine', [ProfileController::class, 'myProfile'])->name('profile.mine');
+    Route::get('/profile&mine', [ProfileBlade::class, 'myProfile'])->name('profile.mine');
     Route::get('/editProfile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/editProfile', [ProfileController::class, 'save'])->name('profile.save');
 
