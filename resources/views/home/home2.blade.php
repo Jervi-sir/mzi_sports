@@ -58,7 +58,19 @@
                 <img class="card-img" :src="result.media" alt="">
             </div>
             <div  v-else>
-                <video :src="result.media" controls/>
+                <video
+                    id="my-video"
+                    class="video-js"
+                    controls
+                    preload="auto"
+                    data-setup="{}"
+                >
+                    <source :src="result.media" type="video/mp4" />
+                    <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    </p>
+                </video>
             </div>
             <div class="stats">
                 @auth
@@ -100,6 +112,8 @@
 @endsection
 
 @section('vuejs')
+<script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     var app = new Vue({
@@ -261,4 +275,17 @@
     })
 </script>
 
+@endsection
+
+@section('style-footer')
+<style>
+    .video-js {
+        width:100%
+    }
+    .video-js .vjs-big-play-button {
+        top: 50%;
+        left:50%;
+        transform: translateX(-50%);
+    }
+    </style>
 @endsection
