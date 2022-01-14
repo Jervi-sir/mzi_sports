@@ -90,7 +90,7 @@ class ProfileController extends Controller
             }
         }
 
-        return view('Blade.profile.view', ['data' => json_encode($data),
+        return view('blade.profile.view', ['data' => json_encode($data),
                                     'isMyProfile' => $data['isMyProfile']]);
     }
 }

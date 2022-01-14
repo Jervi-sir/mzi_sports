@@ -79,7 +79,7 @@ class PostController extends Controller
         }
 
 
-        return view('Blade.posts.view', ['data' => json_encode($data),
+        return view('blade.posts.view', ['data' => json_encode($data),
                                         'uuid' => $data['post']['id'],
                                         'isOwner' => $data['isOwner']]);
     }
