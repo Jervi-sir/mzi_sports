@@ -73,7 +73,7 @@
     </div>
 
     <div class="result">
-        <a :href="post.url" class="card" v-for="(post, index) in results">
+        <a :href="post.url" class="card" v-for="(post, index) in results" :key="index">
             <img class="card-img" :src="post.square_pic" alt="">
             <img v-if="post.type == 'video'" class="play-button" src="../pics/play_button.svg" alt="">
         </a>

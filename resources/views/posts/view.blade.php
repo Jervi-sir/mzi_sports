@@ -95,7 +95,7 @@
         <h3>Are you sure to delete this Post ?</h3>
         <form class="actions" action="{{ route('delete.post', ['uuid' => $uuid]) }}" method="POST">
             @csrf
-            <button type="submit" class="yes">Yes</button>
+            <button type="submit" class="yes" @click="showDeleteModal">Yes</button>
             <button type="button" class="no" @click="showDeleteModal">No</button>
         </form>
     </div>

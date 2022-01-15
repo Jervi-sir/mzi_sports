@@ -20,7 +20,7 @@ class ProfileController extends Controller
     public function view($uuid) {
         $user = User::where('uuid', $uuid)->first();
         $other = json_decode($user->other);
-        $posts = $user->posts;
+        $posts = Post::where('user_id', $user->id)->latest()->get();
         $data['user'] = [
             'uuid' => $user->uuid,
             'name' => $user->name,
