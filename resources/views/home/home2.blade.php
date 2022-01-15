@@ -106,6 +106,12 @@
             </a>
         </div>
         <div class="comments">
+            @guest
+               <h5>
+                   Please <a href="{{ route('login') }}"> Login </a> to post a comment
+                </h5>
+            @endguest
+            @auth
             <form class="add-comment" action="{{ route('comment.store') }}" method="POST" @submit.prevent="comment">
                 <div class="auth-img">
                     <img :src='auth.pic' alt="">
@@ -116,6 +122,7 @@
                     <button type="submit" :disabled="commentBody == ''">Post</button>
                 </div>
             </form>
+            @endauth
             <div class="old-comments">
                 <div class="latest-comments" v-for="(comment, index) in comments">
                     <div class="user-img">

@@ -229,8 +229,7 @@ video {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-height: 100%;
-    overflow-y: scroll;
+
   }
 
 
@@ -338,3 +337,20 @@ video {
   .latest-comments .created {
       font-weight: 200;
   }
+
+  .comments {
+    max-height: 100%;
+    overflow-y: scroll;
+  }
+
+  .comments h5 {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 500;
+  }
+
+  .comments h5 a {
+      font-weight: 600;
+      color: black;
+  }
+
