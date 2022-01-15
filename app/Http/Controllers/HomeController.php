@@ -53,7 +53,18 @@ class HomeController extends Controller
             $likes = $post->usersLike;
             $nbLikes = $post->usersLike->count();
             $user = $post->user()->first();
+            $comments = $post->comments()->latest()->get();
+            foreach ($comments as $ckey => $comment) {
+                $comment_array[$ckey] = [
+                    'id' => $comment->id,
+                    'body' => $comment->comment,
+                    'user' => $comment->user->name,
+                    'pic' => $comment->user->pic,
+                    'created_at' => $comment->created_at->diffForHumans(),
+                ];
+            }
             $data[$key] = [
+                'id' => $post->id,
                 'url' => $base1 . $post->media_link,             //use uuid
                 'name' => $post->name,
                 'media_link' => $post->media_link,
@@ -71,9 +82,14 @@ class HomeController extends Controller
                     'name' => $user->name,
                     'profile_link' => $baseUrl . '/u' . '/' . $user->uuid,
                     'pic' => $user->pic,
-                ]
+                ],
+                'nb_comments' => $comments->count(),
+                'comments' => $comments ? $comment_array : '',
             ];
+
+            $comment_array = [];
         }
+
         return $data;
     }
 
@@ -84,7 +100,18 @@ class HomeController extends Controller
         foreach ($posts as $key => $post) {
             $nbLikes = $post->usersLike->count();
             $user = $post->user()->first();
+            $comments = $post->comments()->latest()->get();
+            foreach ($comments as $ckey => $comment) {
+                $comment_array[$ckey] = [
+                    'id' => $comment->id,
+                    'body' => $comment->comment,
+                    'user' => $comment->user->name,
+                    'pic' => $comment->user->pic,
+                    'created_at' => $comment->created_at->diffForHumans(),
+                ];
+            }
             $data[$key] = [
+                'id' => $post->id,
                 'url' => $base1 . $post->media_link,             //use uuid
                 'name' => $post->name,
                 'media_link' => $post->media_link,
@@ -102,8 +129,11 @@ class HomeController extends Controller
                     'name' => $user->name,
                     'profile_link' => $baseUrl . '/u' . '/' . $user->uuid,
                     'pic' => $user->pic,
-                ]
+                ],
+                'nb_comments' => $comments->count(),
+                'comments' => $comments ? $comment_array : '',
             ];
+            $comment_array = [];
         }
         return $data;
     }

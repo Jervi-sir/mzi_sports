@@ -9,6 +9,7 @@ use App\Http\Controllers\Blade\ProfileController as ProfileBlade;
 use App\Http\Controllers\ProfileController as ProfileController;
 
 use App\Http\Controllers\Blade\PostController as PostBlade;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController as PostController;
 
 
@@ -45,6 +46,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/likePost', [LikeController::class, 'like'])->name('like');
     Route::post('/unlikePost', [LikeController::class, 'unlike'])->name('unlike');
+
+
+    Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');
 });
 
 Route::middleware(['auth', 'admin'])->group(function() {

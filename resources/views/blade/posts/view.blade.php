@@ -82,7 +82,33 @@
             </a>
             <div class="views">
             </div>
-
+        </div>
+        <div class="comments">
+            <form class="add-comment" action="{{ route('comment.store') }}" method="POST" @submit.prevent="comment">
+                <div class="auth-img">
+                    <img :src='auth.pic' alt="">
+                </div>
+                <div class="body-comment">
+                    <input name="post_id" type="text"  hidden>
+                    <textarea name="comment" v-model="commentBody" id="" ></textarea>
+                    <button type="submit" :disabled="commentBody == ''">Post</button>
+                </div>
+            </form>
+            <div class="old-comments">
+                <div class="latest-comments" v-for="(comment, index) in post.comments">
+                    <div class="user-img">
+                        <img :src='comment.pic' alt="">
+                    </div>
+                    <div class="body-comment">
+                        <span>
+                            <b>@{{ comment.user }}</b> @{{comment.body}}
+                        </span>
+                        <span class="created">
+                            @{{comment.created_at}}
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div id="delete-modal" class="delete-modal">
@@ -112,6 +138,7 @@
             auth: [],
             user: [],
             token: '',
+            commentBody: '',
             following: true,
         },
         methods: {
@@ -223,7 +250,36 @@
             showDeleteModal: function() {
                 document.getElementById("delete-modal").classList.toggle("show");
                 document.getElementById("myDropdown").classList.remove("show");
-            }
+            },
+            comment: function(e) {
+                var comment = e.target.querySelector('textarea').value;
+                var post_id = e.target.querySelector('input').value;
+                const url = '{!! route('comment.store') !!}';
+                let fetchData = {
+                    method: 'POST',
+                    body: JSON.stringify({ comment: comment, post_id: post_id}),
+                    headers: new Headers({
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text-plain, */*",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": this.token
+                    })
+                }
+                fetch(url, fetchData)
+                    .then((response) => {
+                        var new_comment = {
+                            'user': this.auth.name,
+                            'pic': this.auth.pic,
+                            'body': this.commentBody,
+                            'created_at': 'Just Now',
+                        };
+                        this.post.comments.unshift(new_comment);
+                        this.commentBody = '';
+
+                    })
+                    .catch((e) => console.log(e));
+
+            },
         },
         mounted() {
             this.token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");

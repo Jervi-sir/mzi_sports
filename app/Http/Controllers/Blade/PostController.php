@@ -19,6 +19,17 @@ class PostController extends Controller
 
         $nbLikes = $post->usersLike->count();
         $likes = $post->usersLike;
+        $comments = $post->comments()->latest()->get();
+        foreach ($comments as $ckey => $comment) {
+            $comment_array[$ckey] = [
+                'id' => $comment->id,
+                'body' => $comment->comment,
+                'user' => $comment->user->name,
+                'pic' => $comment->user->pic,
+                'created_at' => $comment->created_at->diffForHumans(),
+            ];
+        }
+
         $data['post'] = [
             'id' => $post->id,
             'type' => $post->type,
@@ -31,6 +42,8 @@ class PostController extends Controller
             'liked' => $auth ?  ($likes->contains($auth->id) ? true : false) : false,
             'nbLikes' => $nbLikes,
             'created_at' => $post->created_at->diffForHumans(),
+            'nb_comments' => $comments->count(),
+            'comments' => $comments ? $comment_array : '',
         ];
 
         $baseUrl = URL::to('/');

@@ -68,7 +68,6 @@
                     <span>@{{ result.nbLikes }}</span>
                 </a>
                 @endauth
-
                 @guest
                 <a :id="'like_post' + index" href="#" class="heart" @click.prevent="toastr">
                     <img src="../pics/heart_empty.svg" alt="">
@@ -83,6 +82,10 @@
                     <img src="../pics/share.svg" alt="">
                 </a>
             </div>
+            <div class="comment">
+                <button @click="viewComments(index, result.id, result.sharefb)">View all comments ( @{{ result.nb_comments }} )</button>
+                <a :href='result.url'>Check the post</a>
+            </div>
         </div>
     </div>
     <div class="load-more">
@@ -93,6 +96,43 @@
     <footer>
         <h6>copyright MZI sports</h6>
     </footer>
+
+    <div id="comment-modal" class="comment-modal">
+        <div class="top">
+            <button @click='hideComments'><img src="../pics/arrow-back.svg" alt=""></button>
+            <span>Comments</span>
+            <a class='share-btn share-btn-facebook' :href="commentModal.link_share" rel='nofollow' target='_blank'>
+                <img src="../pics/share.svg" alt="">
+            </a>
+        </div>
+        <div class="comments">
+            <form class="add-comment" action="{{ route('comment.store') }}" method="POST" @submit.prevent="comment">
+                <div class="auth-img">
+                    <img :src='auth.pic' alt="">
+                </div>
+                <div class="body-comment">
+                    <input name="post_id" type="text" :value='commentModal.post_id' hidden>
+                    <textarea name="comment" v-model="commentBody" id="" ></textarea>
+                    <button type="submit" :disabled="commentBody == ''">Post</button>
+                </div>
+            </form>
+            <div class="old-comments">
+                <div class="latest-comments" v-for="(comment, index) in comments">
+                    <div class="user-img">
+                        <img :src='comment.pic' alt="">
+                    </div>
+                    <div class="body-comment">
+                        <span>
+                            <b>@{{ comment.user }}</b> @{{comment.body}}
+                        </span>
+                        <span class="created">
+                            @{{comment.created_at}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 @endsection
 
@@ -113,6 +153,18 @@
             selectedTag: '',
             token: '',
             current: '',
+            commentBody: '',
+            comments: {
+                'user': '',
+                'pic': '',
+                'body': '',
+                'created_at': '',
+            },
+            commentModal: {
+                'post_id': '',
+                'link_share': '',
+                'post_index': '',
+            }
 
         },
         methods: {
@@ -238,6 +290,48 @@
                         this.loadIconShow = false;
                     });
             },
+            comment: function(e) {
+                var comment = e.target.querySelector('textarea').value;
+                var post_id = e.target.querySelector('input').value;
+                const url = '{!! route('comment.store') !!}';
+                let fetchData = {
+                    method: 'POST',
+                    body: JSON.stringify({ comment: comment, post_id: post_id}),
+                    headers: new Headers({
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text-plain, */*",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": this.token
+                    })
+                }
+                fetch(url, fetchData)
+                    .then((response) => {
+                        var new_comment = {
+                            'user': this.auth.name,
+                            'pic': this.auth.pic,
+                            'body': this.commentBody,
+                            'created_at': 'Just Now',
+                        };
+                        this.comments.unshift(new_comment);
+                        this.commentBody = '';
+
+                        this.results[this.commentModal.post_index].push(new_comment);
+                    })
+                    .catch((e) => console.log(e));
+
+            },
+            viewComments: function(index, post_id, link_share) {
+                var comment_modal = document.getElementById('comment-modal').classList.add('show')
+                this.comments = this.results[index].comments;
+                this.commentModal.post_id = post_id;
+                this.commentModal.link_share = link_share;
+                this.commentModal.post_index = index;
+                console.log(this.commentModal);
+
+            },
+            hideComments: function() {
+                var comment_modal = document.getElementById('comment-modal').classList.remove('show')
+            }
 
         },
         created() {
